@@ -24,12 +24,11 @@ th{color:var(--mute);font-weight:500;font-size:.85rem;text-transform:capitalize}
 tr.new{background:color-mix(in srgb,var(--accent) 8%,transparent)}
 #msg{min-height:1.5rem;color:var(--mute)}
 .hint{color:var(--mute);font-size:.85rem}
-#login{max-width:300px;margin:5rem auto;display:flex;flex-direction:column;gap:.6rem}
-#lmsg{color:var(--bad);margin:0;min-height:1.25rem}
+#checking{color:var(--mute);text-align:center;margin-top:4rem}
 </style></head><body><div class="box">
-<h1>Admin</h1>
-<form id="login"><input id="email" type="email" placeholder="Email" autocomplete="username" required><input id="pw" type="password" placeholder="Password" autocomplete="current-password" required><button>Sign in</button><p id="lmsg" role="alert"></p></form>
+<p id="checking">Checking sign-in...</p>
 <div id="app" hidden>
+<h1>Admin</h1>
 <div class="bar"><button class="tab on" data-t="prices">Prices</button><button class="tab" data-t="regions">Regions</button><button class="tab" data-t="varieties">Varieties</button><span class="grow"></span><a href="index.html">View public site</a><button id="out" class="del">Sign out</button></div>
 <p id="msg" role="status"></p>
 <div class="wrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
@@ -44,14 +43,14 @@ const T={prices:[['date','date'],['region_id','ref:regions'],['variety_id','ref:
  regions:[['name','text'],['sort_order','number']],varieties:[['name','text']]};
 let tab='prices',refs={regions:[],varieties:[]};
 const msg=t=>$('msg').textContent=t;
+// Gate: only signed-in admins may see this page, everyone else goes to login.html
 async function start(){
- const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ const{data:{session}}=await sb.auth.getSession();
+ if(!session){location.replace('login.html');return}
  const{data:ok}=await sb.rpc('is_admin');
- if(!ok){await sb.auth.signOut();$('lmsg').textContent='This account is not an admin.';return}
- $('login').hidden=true;$('app').hidden=false;load()}
-$('login').onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('pw').value});
- if(error){$('lmsg').textContent='Sign-in failed: '+error.message;return}start()};
-$('out').onclick=async()=>{await sb.auth.signOut();location.reload()};
+ if(!ok){await sb.auth.signOut();location.replace('login.html?denied=1');return}
+ $('checking').hidden=true;$('app').hidden=false;load()}
+$('out').onclick=async()=>{await sb.auth.signOut();location.replace('login.html')};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));load()});
 function cell(c,t,v){
  if(t.startsWith('ref:'))return`<select data-c="${c}" data-t="ref">${refs[t.slice(4)].map(o=>`<option value="${o.id}" ${o.id==v?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
