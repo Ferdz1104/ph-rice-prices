@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Sign in | Presyo ng Bigas</title>
+<style>
+:root{--bg:#fff;--ink:#111;--mute:#6b7280;--line:#e5e7eb;--accent:#1f7a4d;--bad:#b91c1c}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0f0e;--ink:#f3f4f3;--mute:#9ca3a0;--line:#26292a;--accent:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.25rem}
+form{width:100%;max-width:320px;display:flex;flex-direction:column;gap:.7rem}
+h1{font-size:1.1rem;font-weight:600;margin:0}
+.sub{color:var(--mute);margin:0 0 .75rem;font-size:.9rem}
+input,button{font:inherit;padding:.6rem .75rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{cursor:pointer;background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:500}
+button:disabled{opacity:.6;cursor:wait}
+#lmsg{color:var(--bad);margin:0;min-height:1.25rem;font-size:.9rem}
+a{color:var(--mute);font-size:.85rem}
+</style></head><body>
+<form id="login">
+<h1>Admin sign in</h1>
+<p class="sub">Presyo ng Bigas</p>
+<input id="email" type="email" placeholder="Email" autocomplete="username" required>
+<input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+<button id="go">Sign in</button>
+<p id="lmsg" role="alert"></p>
+<a href="index.html">&larr; Back to public site</a>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
+async function isAdmin(){const{data}=await sb.rpc('is_admin');return !!data}
+async function check(){
+ const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ if(await isAdmin())location.replace('admin.html');
+ else{await sb.auth.signOut();$('lmsg').textContent='This account is not an admin.'}}
+$('login').onsubmit=async e=>{
+ e.preventDefault();$('lmsg').textContent='';$('go').disabled=true;
+ const{error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('pw').value});
+ if(error){$('lmsg').textContent='Sign-in failed: '+error.message;$('go').disabled=false;return}
+ await check();$('go').disabled=false};
+if(new URLSearchParams(location.search).get('denied'))$('lmsg').textContent='This account is not an admin.';
+check();
+</script></body></html>
