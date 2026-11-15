@@ -8,7 +8,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.hero{background:linear-gradient(135deg,var(--h1),var(--h2) 60%,var(--h3));color:#fff;padding:3rem 1.1rem 5.5rem;position:relative;overflow:hidden;border-radius:0 0 32px 32px}
+.hero{background:linear-gradient(135deg,var(--h1),var(--h2) 60%,var(--h3));color:#fff;padding:5.6rem 1.1rem 5.5rem;position:relative;overflow:hidden;border-radius:0 0 32px 32px}
 .hero::before{content:"\1F33E";position:absolute;right:-10px;top:-20px;font-size:12rem;opacity:.12;transform:rotate(-12deg)}
 .hero::after{content:"\1F33E";position:absolute;right:130px;bottom:-60px;font-size:7rem;opacity:.1;transform:rotate(18deg)}
 .wrap{max-width:960px;margin:0 auto;position:relative;z-index:1}
@@ -70,15 +70,63 @@ h2{font-size:1.15rem;margin:0;letter-spacing:-.01em}
 .skeleton{color:var(--mute);padding:2rem 0;text-align:center}
 button.retry{font:inherit;margin-top:.6rem;padding:.5rem 1.1rem;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:var(--card);cursor:pointer}
 footer{max-width:960px;margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mute);font-size:.82rem}
+section[id],header[id]{scroll-margin-top:72px}
+/* top nav: slides up when scrolling down, back down when scrolling up */
+.topnav{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:transform .32s ease}
+.topnav.hide{transform:translateY(-100%)}
+.topnav .in{max-width:960px;height:100%;margin:0 auto;padding:0 1.1rem;display:flex;align-items:center;gap:1rem}
+.brand{font-weight:800;letter-spacing:-.02em;white-space:nowrap;color:var(--ink);text-decoration:none}
+.brand span{color:var(--accent)}
+.toplinks{display:flex;gap:.2rem;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.toplinks::-webkit-scrollbar{display:none}
+.toplinks a{color:var(--mute);text-decoration:none;font-size:.88rem;padding:.35rem .8rem;border-radius:999px;white-space:nowrap;transition:.15s}
+.toplinks a:hover{color:var(--ink);background:var(--soft)}
+.toplinks a.on{background:var(--soft);color:var(--accent);font-weight:600}
+/* right side nav: always stays in place */
+.sidenav{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:.15rem;padding:.55rem .5rem;background:color-mix(in srgb,var(--card) 85%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow)}
+.sidenav a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--mute);font-size:.8rem;padding:.28rem 0}
+.sidenav a b{display:block;width:10px;height:10px;border-radius:50%;border:2px solid var(--mute);transition:.2s}
+.sidenav a span{position:absolute;right:30px;opacity:0;transform:translateX(6px);pointer-events:none;white-space:nowrap;background:var(--card);border:1px solid var(--line);padding:.15rem .65rem;border-radius:999px;transition:.2s;color:var(--ink)}
+.sidenav a{position:relative}
+.sidenav a:hover span{opacity:1;transform:none}
+.sidenav a.on b{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
+@media(min-width:1280px){
+ .sidenav{right:max(14px,calc((100vw - 960px)/2 - 150px));background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0}
+ .sidenav a{flex-direction:row-reverse}
+ .sidenav a span{position:static;opacity:1;transform:none;background:none;border:0;padding:0;color:var(--mute)}
+ .sidenav a.on span{color:var(--ink);font-weight:700}
+}
+@media(max-width:640px){.sidenav{display:none}.brand{font-size:.95rem}.topnav .in{gap:.5rem}}
 @media(max-width:600px){
- .hero{padding-top:2.2rem;border-radius:0 0 24px 24px}
+ .hero{padding-top:4.8rem;border-radius:0 0 24px 24px}
  .lvp{grid-template-columns:1fr}
  .mid{flex-direction:row;gap:.6rem;min-width:0}.mid .arrow{transform:rotate(90deg)}
  .item{grid-template-columns:minmax(0,1fr) 5rem 4rem}.item .bar{display:none}
  .chartbox{height:230px}
 }
 </style></head><body>
-<header class="hero"><div class="wrap">
+<nav class="topnav" id="topnav" aria-label="Main">
+ <div class="in">
+  <a class="brand" href="#top">&#127806; Presyo ng <span>Bigas</span></a>
+  <div class="toplinks">
+   <a href="#top" data-nav="top" class="on">Overview</a>
+   <a href="#latest" data-nav="latest">Latest</a>
+   <a href="#trend" data-nav="trend">Trend</a>
+   <a href="#compare" data-nav="compare">Compare</a>
+   <a href="#movers" data-nav="movers">Movers</a>
+   <a href="#regions" data-nav="regions">Regions</a>
+  </div>
+ </div>
+</nav>
+<nav class="sidenav" aria-label="Sections">
+ <a href="#top" data-nav="top" class="on" title="Overview"><span>Overview</span><b></b></a>
+ <a href="#latest" data-nav="latest" title="Latest"><span>Latest</span><b></b></a>
+ <a href="#trend" data-nav="trend" title="Trend"><span>Trend</span><b></b></a>
+ <a href="#compare" data-nav="compare" title="Compare"><span>Compare</span><b></b></a>
+ <a href="#movers" data-nav="movers" title="Movers"><span>Movers</span><b></b></a>
+ <a href="#regions" data-nav="regions" title="Regions"><span>Regions</span><b></b></a>
+</nav>
+<header class="hero" id="top"><div class="wrap">
  <span class="eyebrow">Philippines &middot; Rice price tracker</span>
  <h1>Presyo ng <span>Bigas</span></h1>
  <p>See what rice costs per kilo in every region, how prices moved since the last update, and where they are heading.</p>
@@ -102,12 +150,12 @@ footer{max-width:960px;margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mut
   <div class="stat" style="--c:#d9a521"><div class="ic">&#128197;</div><div class="k">Coverage</div><div class="v" id="s4">-</div><div class="s" id="s4s"></div></div>
  </section>
 
- <section class="card">
+ <section class="card" id="latest">
   <div class="head"><div><h2>Last update vs latest update</h2><p class="hint" id="lvpHint"></p></div></div>
   <div id="lvp"></div>
  </section>
 
- <section class="card" id="chartcard">
+ <section class="card" id="trend">
   <div class="head">
    <div><h2 id="ctitle">Price trend</h2><button class="clear" id="clear" hidden>Show all regions</button><p class="hint">How the price per kilo changed over time.</p></div>
    <div class="seg" id="ranges" role="group" aria-label="Time range">
@@ -118,19 +166,19 @@ footer{max-width:960px;margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mut
   <p class="empty" id="noChart" hidden>No price data for this selection yet.</p>
  </section>
 
- <section class="card">
+ <section class="card" id="compare">
   <div class="head"><div><h2>Previous vs latest, by region</h2><p class="hint">Grey is the last update, green is the latest. Tap a bar to open that region.</p></div></div>
   <div class="chartbox" id="cmpBox"><canvas id="cmp"></canvas></div>
   <p class="empty" id="noCmp" hidden>No regional data yet.</p>
  </section>
 
- <section class="card">
+ <section class="card" id="movers">
   <div class="head"><div><h2>Who moved the most</h2><p class="hint">Change in price per kilo since each region's previous update. Orange went up, green went down.</p></div></div>
   <div class="chartbox" id="chgBox"><canvas id="chg"></canvas></div>
   <p class="empty" id="noChg" hidden>Each region needs at least two updates to show a change.</p>
  </section>
 
- <section class="card">
+ <section class="card" id="regions">
   <div class="head"><div><h2>Prices by region</h2><p class="hint">Latest price in every region.</p></div>
    <div class="seg" id="sorts" role="group" aria-label="Sort">
     <button data-s="name" aria-pressed="true">A to Z</button><button data-s="low" aria-pressed="false">Lowest first</button><button data-s="high" aria-pressed="false">Highest first</button>
@@ -176,7 +224,7 @@ async function init(){
  $('sorts').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.sort=b.dataset.s;render()};
  render()}
 
-function pickRegion(id){state.r=id;$('region').value=id;render();if(id)$('chartcard').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function pickRegion(id){state.r=id;$('region').value=id;render();if(id)$('trend').scrollIntoView({behavior:'smooth',block:'nearest'})}
 
 function rowsFor(vp){return regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id),a=s[s.length-1],b=s[s.length-2];return{rg,a,b,d:a&&b?a.price_per_kg-b.price_per_kg:null}})}
 function series(vp,r){const src=r?vp.filter(p=>p.region_id===r):vp,by={};src.forEach(p=>(by[p.date]??=[]).push(+p.price_per_kg));const labels=Object.keys(by).sort();return{labels,data:labels.map(d=>by[d].reduce((a,b)=>a+b,0)/by[d].length)}}
@@ -256,6 +304,20 @@ function renderList(rows){
   const w=Math.max(4,+x.a.price_per_kg/max*100);
   return`<li class="item ${x.rg.id===state.r?'sel':''}" data-r="${x.rg.id}" tabindex="0" title="As of ${fmt(x.a.date)}"><span class="nm">${esc(x.rg.name)}</span><span class="bar"><i style="width:${w}%"></i></span><span class="pr">${peso(x.a.price_per_kg)}</span><span class="ch ${x.d>0?'up':x.d<0?'down':''}">${delta(x.d)}</span></li>`}).join(''):'<li class="empty">No regions match your search.</li>';
  $('list').querySelectorAll('.item').forEach(li=>{const go=()=>pickRegion(+li.dataset.r);li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
+
+// top nav: hide when scrolling down, show when scrolling up (side nav never moves)
+const topnav=$('topnav');let lastY=scrollY,tick=false;
+addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{
+ const y=scrollY,d=y-lastY;
+ if(y<60){topnav.classList.remove('hide');lastY=y}
+ else if(Math.abs(d)>6){topnav.classList.toggle('hide',d>0);lastY=y}
+ tick=false})},{passive:true});
+topnav.addEventListener('focusin',()=>topnav.classList.remove('hide'));
+// highlight the section currently in view in both navs
+const navLinks=document.querySelectorAll('[data-nav]');
+function setActive(id){navLinks.forEach(a=>{const on=a.dataset.nav===id;a.classList.toggle('on',on);on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')})}
+const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(e.target.id)}),{rootMargin:'-35% 0px -60% 0px'});
+['top','latest','trend','compare','movers','regions'].forEach(id=>{const el=$(id);el&&spy.observe(el)});
 
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(prices.length)render()});
 init();
