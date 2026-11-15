@@ -2,17 +2,30 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Admin | Presyo ng Bigas</title>
 <style>
-:root{--ink:#1b2a20;--mute:#5d6e62;--paddy:#2e6b3f;--bg:#f6f8f2;--card:#fff;--line:#dce4d6;--bad:#b03a2e}
-@media(prefers-color-scheme:dark){:root{--ink:#e8efe6;--mute:#9db0a2;--paddy:#7bc08e;--bg:#111913;--card:#18221b;--line:#2a372d;--bad:#e57d70}}
-*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:1.25rem}
-.box{max-width:1000px;margin:auto}h1{font:700 1.8rem Georgia,serif;color:var(--paddy);margin:0 0 1rem}
-input,select,button{font:inherit;padding:.45rem;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
-button{cursor:pointer;background:var(--paddy);color:#fff;border-color:var(--paddy)}button.del{background:transparent;color:var(--bad);border-color:var(--bad)}
-button.tab{background:var(--card);color:var(--ink);border-color:var(--line)}button.tab.on{background:var(--paddy);color:#fff}
-.bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}.grow{flex:1}
-.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;min-width:640px}
-th,td{padding:.4rem;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mute);font-size:.85rem}tr.new{background:color-mix(in srgb,var(--paddy) 10%,transparent)}
-#msg{min-height:1.5rem;color:var(--mute)}#login{max-width:320px;margin:4rem auto;display:flex;flex-direction:column;gap:.6rem}
+:root{--bg:#fff;--ink:#111;--mute:#6b7280;--line:#e5e7eb;--accent:#1f7a4d;--bad:#b91c1c}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0f0e;--ink:#f3f4f3;--mute:#9ca3a0;--line:#26292a;--accent:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:2rem 1.25rem}
+.box{max-width:1000px;margin:0 auto}
+h1{font-size:1.1rem;font-weight:600;margin:0 0 1.5rem}
+a{color:var(--accent)}
+input,select,button{font:inherit;padding:.5rem .65rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{cursor:pointer;background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:500}
+button.del{background:transparent;color:var(--bad);border-color:var(--line)}
+button.tab{background:transparent;color:var(--mute);border-color:transparent}
+button.tab.on{color:var(--ink);border-color:var(--line)}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}.grow{flex:1}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:.5rem;border-bottom:1px solid var(--line);text-align:left}
+tr:last-child td{border-bottom:0}
+th{color:var(--mute);font-weight:500;font-size:.85rem;text-transform:capitalize}
+tr.new{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+#msg{min-height:1.5rem;color:var(--mute)}
+.hint{color:var(--mute);font-size:.85rem}
+#login{max-width:300px;margin:5rem auto;display:flex;flex-direction:column;gap:.6rem}
+#lmsg{color:var(--bad);margin:0;min-height:1.25rem}
 </style></head><body><div class="box">
 <h1>Admin</h1>
 <form id="login"><input id="email" type="email" placeholder="Email" autocomplete="username" required><input id="pw" type="password" placeholder="Password" autocomplete="current-password" required><button>Sign in</button><p id="lmsg" role="alert"></p></form>
@@ -20,7 +33,7 @@ th,td{padding:.4rem;border-bottom:1px solid var(--line);text-align:left}th{color
 <div class="bar"><button class="tab on" data-t="prices">Prices</button><button class="tab" data-t="regions">Regions</button><button class="tab" data-t="varieties">Varieties</button><span class="grow"></span><a href="index.html">View public site</a><button id="out" class="del">Sign out</button></div>
 <p id="msg" role="status"></p>
 <div class="wrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
-<p style="color:var(--mute)">Prices tab shows the 200 most recent entries. The shaded top row adds a new entry.</p>
+<p class="hint">Prices shows the 200 most recent entries. The shaded top row adds a new entry.</p>
 </div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
