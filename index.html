@@ -1,47 +1,115 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Presyo ng Bigas | Philippine Rice Prices</title>
+<meta name="description" content="Rice prices per kilo in every region of the Philippines, by variety.">
 <style>
-:root{--bg:#fff;--ink:#111;--mute:#6b7280;--line:#e5e7eb;--accent:#1f7a4d;--up:#c2410c;--down:#1f7a4d}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0f0e;--ink:#f3f4f3;--mute:#9ca3a0;--line:#26292a;--accent:#4ade80;--up:#fb923c;--down:#4ade80}}
+:root{--bg:#f6f7f3;--card:#fff;--ink:#16201a;--mute:#667168;--line:#e4e8e0;--accent:#1f7a4d;--soft:#e7f3ec;--up:#c2410c;--down:#1f7a4d;--shadow:0 1px 2px rgba(0,0,0,.04)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d110e;--card:#151b17;--ink:#eef3ee;--mute:#98a69c;--line:#242d27;--accent:#4ade80;--soft:#15291d;--up:#fb923c;--down:#4ade80;--shadow:none}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:720px;margin:0 auto;padding:3rem 1.25rem 2rem}
-h1{font-size:1.1rem;font-weight:600;margin:0 0 .25rem;letter-spacing:-.01em}
-.sub{color:var(--mute);margin:0 0 2rem;font-size:.95rem}
-.filters{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
-select{flex:1;min-width:180px;font:inherit;padding:.6rem .75rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
-select:focus{outline:2px solid var(--accent);outline-offset:1px}
-.big{font-size:clamp(2.6rem,10vw,3.8rem);font-weight:700;letter-spacing:-.03em;line-height:1}
-.meta{margin:.5rem 0 1.5rem;color:var(--mute);font-size:.9rem}
-.up{color:var(--up)}.down{color:var(--down)}
-.chartbox{position:relative;height:240px;margin-bottom:2.5rem}
-h2{font-size:.8rem;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin:0 0 .5rem}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:.65rem 0;border-bottom:1px solid var(--line)}
-th{font-weight:500;color:var(--mute);font-size:.85rem}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
-tbody tr{cursor:pointer}tbody tr:hover td,tr.sel td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
-#msg{color:var(--mute);min-height:1.5rem}
-footer{max-width:720px;margin:0 auto;padding:0 1.25rem 3rem;color:var(--mute);font-size:.8rem}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:2.5rem 1.1rem 1rem}
+.hero{margin-bottom:1.5rem}
+h1{font-size:clamp(1.8rem,6vw,2.4rem);line-height:1.1;margin:0 0 .4rem;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.hero p{margin:0;color:var(--mute);max-width:56ch}
+.updated{display:inline-block;margin-top:.75rem;font-size:.82rem;color:var(--mute);background:var(--card);border:1px solid var(--line);padding:.2rem .65rem;border-radius:999px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.label{display:block;font-size:.78rem;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip,.seg button{font:inherit;font-size:.9rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:.4rem .85rem;border-radius:999px}
+.chip:hover,.seg button:hover{border-color:var(--accent)}
+.chip[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--card);font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1rem;align-items:flex-end}
+.field{flex:1;min-width:220px}
+select,input[type=search]{width:100%;font:inherit;padding:.6rem .75rem;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+select:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.stat .k{font-size:.78rem;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.stat .v{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:700;letter-spacing:-.02em;margin:.15rem 0 0}
+.stat .s{font-size:.82rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.head{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+h2{font-size:1.05rem;margin:0}
+.seg{display:flex;gap:.35rem;flex-wrap:wrap}
+.seg button{padding:.25rem .7rem;font-size:.82rem}
+.chartbox{position:relative;height:260px}
+.clear{font:inherit;font-size:.82rem;color:var(--accent);background:none;border:0;cursor:pointer;padding:0;text-decoration:underline}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.5rem}
+.tools input{flex:1;min-width:160px}
+.list{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 5.2rem 4.2rem;align-items:center;gap:.75rem;padding:.7rem .4rem;border-top:1px solid var(--line);cursor:pointer;border-radius:8px}
+.item:hover,.item.sel{background:var(--soft)}
+.item .nm{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.item .pr{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.item .ch{text-align:right;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--mute)}
+.up{color:var(--up)!important}.down{color:var(--down)!important}
+.nodata .nm{color:var(--mute)}.nodata .pr{grid-column:2/-1;font-weight:400;color:var(--mute)}
+.empty{padding:2rem 0;text-align:center;color:var(--mute)}
+.skeleton{color:var(--mute);padding:1.5rem 0;text-align:center}
+button.retry{font:inherit;margin-top:.5rem;padding:.45rem 1rem;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--card);cursor:pointer}
+footer{max-width:860px;margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mute);font-size:.82rem}
+@media(max-width:560px){
+ main{padding-top:1.75rem}
+ .stats{grid-template-columns:1fr}
+ .stat{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+ .stat .v{margin:0}
+ .item{grid-template-columns:minmax(0,1fr) 5rem 4rem}
+ .item .bar{display:none}
+ .nodata .pr{grid-column:2/-1}
+ .chartbox{height:220px}
+}
 </style></head><body>
 <main>
-<h1>Presyo ng Bigas</h1>
-<p class="sub">Rice prices per kilo across the Philippines.</p>
-<div class="filters">
-<select id="variety" aria-label="Variety"></select>
-<select id="region" aria-label="Region"></select>
+<section class="hero">
+ <h1>Presyo ng <span>Bigas</span></h1>
+ <p>See what rice costs per kilo in every region of the Philippines. Pick a variety, then tap a region to see its trend.</p>
+ <span class="updated" id="updated" hidden></span>
+</section>
+
+<section class="card" id="controls" hidden>
+ <span class="label">Rice variety</span>
+ <div class="chips" id="chips"></div>
+ <div class="row">
+  <div class="field"><label class="label" for="region">Region</label><select id="region"></select></div>
+ </div>
+</section>
+
+<div id="status" class="skeleton" role="status">Loading prices...</div>
+
+<div id="content" hidden>
+ <section class="stats">
+  <div class="stat"><div class="k">National average</div><div class="v" id="s1">-</div><div class="s" id="s1s"></div></div>
+  <div class="stat"><div class="k">Lowest</div><div class="v" id="s2">-</div><div class="s" id="s2s"></div></div>
+  <div class="stat"><div class="k">Highest</div><div class="v" id="s3">-</div><div class="s" id="s3s"></div></div>
+ </section>
+
+ <section class="card" id="chartcard">
+  <div class="head">
+   <div><h2 id="ctitle">Price trend</h2><button class="clear" id="clear" hidden>Show all regions</button></div>
+   <div class="seg" id="ranges" role="group" aria-label="Time range">
+    <button data-r="1m" aria-pressed="false">1M</button><button data-r="3m" aria-pressed="false">3M</button><button data-r="6m" aria-pressed="false">6M</button><button data-r="all" aria-pressed="true">All</button>
+   </div>
+  </div>
+  <div class="chartbox"><canvas id="chart"></canvas></div>
+  <p class="empty" id="noChart" hidden>No price data for this selection yet.</p>
+ </section>
+
+ <section class="card">
+  <div class="head"><h2>Prices by region</h2>
+   <div class="seg" id="sorts" role="group" aria-label="Sort">
+    <button data-s="name" aria-pressed="true">A to Z</button><button data-s="low" aria-pressed="false">Lowest first</button><button data-s="high" aria-pressed="false">Highest first</button>
+   </div>
+  </div>
+  <div class="tools"><input type="search" id="q" placeholder="Search a region..." aria-label="Search regions"></div>
+  <ul class="list" id="list"></ul>
+ </section>
 </div>
-<p id="msg" role="status">Loading prices...</p>
-<div class="big" id="big">-</div>
-<p class="meta" id="meta"></p>
-<div class="chartbox"><canvas id="chart"></canvas></div>
-<h2>Latest by region</h2>
-<table>
-<thead><tr><th>Region</th><th class="n">Per kg</th><th class="n">Change</th></tr></thead>
-<tbody id="rows"></tbody></table>
 </main>
-<footer>Prices in Philippine pesos (PHP) per kilogram. The source of each entry is recorded by the site admin.</footer>
+<footer>Prices are in Philippine pesos (PHP) per kilogram. The latest entry for each region is shown, and "change" compares it with the entry before it. The source of each entry is recorded by the site admin.</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="config.js"></script>
@@ -50,36 +118,82 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.ge
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const peso=n=>'₱'+Number(n).toFixed(2);
 const delta=d=>d===null?'-':(d>0?'+':'')+d.toFixed(2);
+const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+const hexA=(h,a)=>{const n=parseInt(h.replace('#',''),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
+const DAYS={'1m':30,'3m':90,'6m':180};
 let regions=[],varieties=[],prices=[],chart;
+const state={v:0,r:0,range:'all',sort:'name',q:''};
+
 async function all(table,cols,order){let out=[],f=0;for(;;){const{data,error}=await sb.from(table).select(cols).order(order).order('id').range(f,f+999);if(error)throw error;out.push(...data);if(data.length<1000)return out;f+=1000}}
+
 async function init(){
+ $('status').className='skeleton';$('status').textContent='Loading prices...';
  try{[regions,varieties,prices]=await Promise.all([all('regions','*','sort_order'),all('varieties','*','name'),all('prices','*','date')])}
- catch(e){$('msg').textContent='Could not load prices. Please try again later.';return}
- $('variety').innerHTML=varieties.map(v=>`<option value="${v.id}">${esc(v.name)}</option>`).join('');
- $('region').innerHTML='<option value="">All regions (average)</option>'+regions.map(r=>`<option value="${r.id}">${esc(r.name)}</option>`).join('');
- $('variety').onchange=$('region').onchange=render;
- $('msg').textContent=prices.length?'':'No prices have been published yet.';render()}
+ catch(e){$('status').innerHTML='Could not load prices. Please check your connection and try again.<br><button class="retry" id="retry">Try again</button>';$('retry').onclick=init;return}
+ if(!prices.length||!varieties.length){$('status').className='empty';$('status').textContent='No prices have been published yet. Please check back soon.';return}
+ $('status').hidden=true;$('controls').hidden=false;$('content').hidden=false;
+ const last=prices.reduce((m,p)=>p.date>m?p.date:m,'');$('updated').textContent='Last updated '+fmt(last);$('updated').hidden=false;
+ // start with the variety that has the most data
+ const counts={};prices.forEach(p=>counts[p.variety_id]=(counts[p.variety_id]||0)+1);
+ state.v=+Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0]||varieties[0].id;
+ $('region').innerHTML='<option value="0">All regions (average)</option>'+regions.map(r=>`<option value="${r.id}">${esc(r.name)}</option>`).join('');
+ $('region').onchange=()=>{state.r=+$('region').value;render()};
+ $('q').oninput=e=>{state.q=e.target.value.trim().toLowerCase();renderList()};
+ $('clear').onclick=()=>pickRegion(0);
+ $('ranges').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.range=b.dataset.r;render()};
+ $('sorts').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.sort=b.dataset.s;render()};
+ render()}
+
+function pickRegion(id){state.r=id;$('region').value=id;render();if(id)$('chartcard').scrollIntoView({behavior:'smooth',block:'nearest'})}
+
+function rowsFor(vp){return regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id),a=s[s.length-1],b=s[s.length-2];return{rg,a,d:a&&b?a.price_per_kg-b.price_per_kg:null}})}
+
 function render(){
- const v=+$('variety').value,r=+$('region').value,vp=prices.filter(p=>p.variety_id===v);
- // table: latest price and change per region
- $('rows').innerHTML=regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id);
-  if(!s.length)return`<tr data-r="${rg.id}"><td>${esc(rg.name)}</td><td class="n" colspan="2">No data</td></tr>`;
-  const a=s[s.length-1],b=s[s.length-2],d=b?a.price_per_kg-b.price_per_kg:null;
-  return`<tr data-r="${rg.id}" class="${rg.id===r?'sel':''}"><td>${esc(rg.name)}</td><td class="n">${peso(a.price_per_kg)}</td><td class="n ${d>0?'up':d<0?'down':''}">${delta(d)}</td></tr>`}).join('');
- $('rows').querySelectorAll('tr').forEach(t=>t.onclick=()=>{$('region').value=t.dataset.r;render()});
- // chart: selected region, or the average of all regions per date
- const src=r?vp.filter(p=>p.region_id===r):vp,byDate={};
+ const vp=prices.filter(p=>p.variety_id===state.v);
+ // variety chips
+ $('chips').innerHTML=varieties.map(v=>`<button class="chip" data-v="${v.id}" aria-pressed="${v.id===state.v}">${esc(v.name)}</button>`).join('');
+ $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.v=+b.dataset.v;render()});
+ $('ranges').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===state.range));
+ $('sorts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===state.sort));
+ // summary cards
+ const rows=rowsFor(vp),have=rows.filter(x=>x.a);
+ if(have.length){
+  const avg=have.reduce((s,x)=>s+ +x.a.price_per_kg,0)/have.length;
+  const lo=have.reduce((m,x)=>+x.a.price_per_kg<+m.a.price_per_kg?x:m),hi=have.reduce((m,x)=>+x.a.price_per_kg>+m.a.price_per_kg?x:m);
+  $('s1').textContent=peso(avg);$('s1s').textContent=`per kg, ${have.length} of ${regions.length} regions`;
+  $('s2').textContent=peso(lo.a.price_per_kg);$('s2s').textContent=lo.rg.name;
+  $('s3').textContent=peso(hi.a.price_per_kg);$('s3s').textContent=hi.rg.name;
+ }else{['s1','s2','s3'].forEach(k=>{$(k).textContent='-';$(k+'s').textContent='No data yet'})}
+ renderChart(vp);renderList(rows)}
+
+function renderChart(vp){
+ const r=state.r,src=r?vp.filter(p=>p.region_id===r):vp,byDate={};
  src.forEach(p=>(byDate[p.date]??=[]).push(+p.price_per_kg));
- const labels=Object.keys(byDate).sort(),data=labels.map(d=>byDate[d].reduce((a,b)=>a+b,0)/byDate[d].length);
- // headline number
- if(data.length){const last=data[data.length-1],prev=data.length>1?data[data.length-2]:null,d=prev===null?null:last-prev;
-  $('big').textContent=peso(last);
-  $('meta').innerHTML=`per kg &middot; ${labels[labels.length-1]}`+(d===null?'':` &middot; <span class="${d>0?'up':d<0?'down':''}">${delta(d)}</span>`)}
- else{$('big').textContent='-';$('meta').textContent='No data for this selection.'}
+ let labels=Object.keys(byDate).sort();
+ if(state.range!=='all'&&labels.length){const end=new Date(labels[labels.length-1]+'T00:00:00');end.setDate(end.getDate()-DAYS[state.range]);const cut=end.toISOString().slice(0,10);labels=labels.filter(d=>d>=cut)}
+ const data=labels.map(d=>byDate[d].reduce((a,b)=>a+b,0)/byDate[d].length);
+ const vn=varieties.find(x=>x.id===state.v)?.name||'',rn=r?regions.find(x=>x.id===r).name:'All regions (average)';
+ $('ctitle').textContent=`${vn} \u00b7 ${rn}`;$('clear').hidden=!r;
+ $('noChart').hidden=labels.length>0;document.querySelector('.chartbox').hidden=!labels.length;
+ chart&&chart.destroy();if(!labels.length)return;
  const css=getComputedStyle(document.documentElement),accent=css.getPropertyValue('--accent').trim(),line=css.getPropertyValue('--line').trim(),mute=css.getPropertyValue('--mute').trim();
- chart&&chart.destroy();
- chart=new Chart($('chart'),{type:'line',data:{labels,datasets:[{data,borderColor:accent,backgroundColor:accent,borderWidth:2,tension:.25,pointRadius:2}]},
-  options:{maintainAspectRatio:false,plugins:{legend:{display:false}},
-   scales:{x:{grid:{display:false},ticks:{color:mute,maxTicksLimit:6}},y:{grid:{color:line},ticks:{color:mute,callback:x=>'₱'+x}}}}})}
+ chart=new Chart($('chart'),{type:'line',data:{labels:labels.map(fmt),datasets:[{data,borderColor:accent,backgroundColor:hexA(accent,.12),fill:true,borderWidth:2.5,tension:.3,pointRadius:labels.length>40?0:3,pointHoverRadius:5}]},
+  options:{maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+peso(c.parsed.y)+' per kg'}}},
+   scales:{x:{grid:{display:false},ticks:{color:mute,maxTicksLimit:5,maxRotation:0}},y:{grid:{color:line},ticks:{color:mute,callback:x=>'₱'+x}}}}})}
+
+function renderList(rows){
+ rows=rows||rowsFor(prices.filter(p=>p.variety_id===state.v));
+ let list=rows.filter(x=>x.rg.name.toLowerCase().includes(state.q));
+ if(state.sort!=='name'){const dir=state.sort==='low'?1:-1;
+  list=[...list].sort((a,b)=>!a.a?1:!b.a?-1:dir*(a.a.price_per_kg-b.a.price_per_kg))}
+ const max=Math.max(...rows.filter(x=>x.a).map(x=>+x.a.price_per_kg),1);
+ $('list').innerHTML=list.length?list.map(x=>{
+  if(!x.a)return`<li class="item nodata" data-r="${x.rg.id}"><span class="nm">${esc(x.rg.name)}</span><span class="pr">No data yet</span></li>`;
+  const w=Math.max(4,+x.a.price_per_kg/max*100);
+  return`<li class="item ${x.rg.id===state.r?'sel':''}" data-r="${x.rg.id}" tabindex="0" title="As of ${fmt(x.a.date)}"><span class="nm">${esc(x.rg.name)}</span><span class="bar"><i style="width:${w}%"></i></span><span class="pr">${peso(x.a.price_per_kg)}</span><span class="ch ${x.d>0?'up':x.d<0?'down':''}">${delta(x.d)}</span></li>`}).join(''):'<li class="empty">No regions match your search.</li>';
+ $('list').querySelectorAll('.item').forEach(li=>{const go=()=>pickRegion(+li.dataset.r);li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
+
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(prices.length)render()});
 init();
 </script></body></html>
