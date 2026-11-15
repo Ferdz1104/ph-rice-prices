@@ -99,7 +99,8 @@ section[id],header[id]{scroll-margin-top:72px}
 .toplinks a:hover{color:var(--ink);background:var(--soft)}
 .toplinks a.on{background:var(--soft);color:var(--accent);font-weight:600}
 /* left side nav: always stays in place */
-.sidenav{position:fixed;left:16px;top:50%;transform:translateY(-50%);z-index:40;width:11.2rem;padding:.7rem;display:flex;flex-direction:column;gap:.15rem;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.sidenav{position:fixed;left:16px;top:78px;transition:top .32s ease;z-index:40;width:11.2rem;padding:.7rem;display:flex;flex-direction:column;gap:.15rem;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.topnav.hide~.sidenav{top:20px}
 .sidenav .ttl{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:.2rem .75rem .5rem}
 .sidenav a{position:relative;display:flex;align-items:center;gap:.7rem;padding:.55rem .75rem;border-radius:13px;color:var(--mute);text-decoration:none;font-size:.9rem;font-weight:500;transition:background .18s,color .18s}
 .sidenav a svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
