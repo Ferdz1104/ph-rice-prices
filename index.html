@@ -70,6 +70,22 @@ h2{font-size:1.15rem;margin:0;letter-spacing:-.01em}
 .skeleton{color:var(--mute);padding:2rem 0;text-align:center}
 button.retry{font:inherit;margin-top:.6rem;padding:.5rem 1.1rem;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:var(--card);cursor:pointer}
 footer{max-width:960px;margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mute);font-size:.82rem}
+.dd{position:relative}
+.dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;font:inherit;text-align:left;padding:.65rem .85rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.dd-btn:hover{border-color:var(--accent)}
+.dd.open .dd-btn{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.dd-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-btn svg{width:18px;height:18px;flex:none;fill:none;stroke:var(--mute);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.dd.open .dd-btn svg{transform:rotate(180deg);stroke:var(--accent)}
+.dd-panel{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 44px rgba(10,40,25,.2);padding:.5rem;animation:ddin .14s ease}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.dd-q{margin-bottom:.4rem;padding:.5rem .75rem!important;font-size:.9rem!important}
+.dd-list{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto;scrollbar-width:thin}
+.dd-list li{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.5rem .7rem;border-radius:9px;cursor:pointer;font-size:.92rem}
+.dd-list li:hover,.dd-list li:focus{background:var(--soft);outline:0}
+.dd-list li.sel{color:var(--accent);font-weight:600}
+.dd-list li.sel::after{content:"\2713"}
+.dd-list li.dd-empty{color:var(--mute);justify-content:center;cursor:default;background:none}
 section[id],header[id]{scroll-margin-top:72px}
 /* top nav: slides up when scrolling down, back down when scrolling up */
 .topnav{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:transform .32s ease}
@@ -82,21 +98,28 @@ section[id],header[id]{scroll-margin-top:72px}
 .toplinks a{color:var(--mute);text-decoration:none;font-size:.88rem;padding:.35rem .8rem;border-radius:999px;white-space:nowrap;transition:.15s}
 .toplinks a:hover{color:var(--ink);background:var(--soft)}
 .toplinks a.on{background:var(--soft);color:var(--accent);font-weight:600}
-/* right side nav: always stays in place */
-.sidenav{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:.15rem;padding:.55rem .5rem;background:color-mix(in srgb,var(--card) 85%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow)}
-.sidenav a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--mute);font-size:.8rem;padding:.28rem 0}
-.sidenav a b{display:block;width:10px;height:10px;border-radius:50%;border:2px solid var(--mute);transition:.2s}
-.sidenav a span{position:absolute;right:30px;opacity:0;transform:translateX(6px);pointer-events:none;white-space:nowrap;background:var(--card);border:1px solid var(--line);padding:.15rem .65rem;border-radius:999px;transition:.2s;color:var(--ink)}
-.sidenav a{position:relative}
-.sidenav a:hover span{opacity:1;transform:none}
-.sidenav a.on b{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
-@media(min-width:1280px){
- .sidenav{right:max(14px,calc((100vw - 960px)/2 - 150px));background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0}
- .sidenav a{flex-direction:row-reverse}
- .sidenav a span{position:static;opacity:1;transform:none;background:none;border:0;padding:0;color:var(--mute)}
- .sidenav a.on span{color:var(--ink);font-weight:700}
+/* left side nav: always stays in place */
+.sidenav{position:fixed;left:16px;top:50%;transform:translateY(-50%);z-index:40;width:178px;padding:.7rem;display:flex;flex-direction:column;gap:.15rem;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.sidenav .ttl{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:.2rem .75rem .5rem}
+.sidenav a{position:relative;display:flex;align-items:center;gap:.7rem;padding:.55rem .75rem;border-radius:13px;color:var(--mute);text-decoration:none;font-size:.9rem;font-weight:500;transition:background .18s,color .18s}
+.sidenav a svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sidenav a:hover{background:var(--soft);color:var(--ink)}
+.sidenav a.on{background:var(--soft);color:var(--accent);font-weight:700}
+.sidenav a.on::before{content:"";position:absolute;left:0;top:24%;bottom:24%;width:3px;border-radius:3px;background:var(--accent)}
+.sidenav .track{height:4px;border-radius:99px;background:var(--line);margin:.6rem .6rem .15rem;overflow:hidden}
+.sidenav .track i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .12s}
+@media(min-width:1200px){
+ .hero .wrap,main,footer,.topnav .in{margin-left:max(214px,calc((100vw - 960px)/2));margin-right:auto}
 }
-@media(max-width:640px){.sidenav{display:none}.brand{font-size:.95rem}.topnav .in{gap:.5rem}}
+@media(min-width:761px) and (max-width:1199px){
+ .sidenav{width:52px;padding:.5rem;align-items:center;border-radius:18px;left:10px}
+ .sidenav .ttl,.sidenav .track{display:none}
+ .sidenav a{padding:.6rem;justify-content:center}
+ .sidenav a span{position:absolute;left:calc(100% + 12px);opacity:0;transform:translateX(-6px);pointer-events:none;white-space:nowrap;background:var(--card);border:1px solid var(--line);padding:.25rem .7rem;border-radius:999px;color:var(--ink);font-size:.82rem;font-weight:500;box-shadow:var(--shadow);transition:.18s}
+ .sidenav a:hover span{opacity:1;transform:none}
+ .hero,main,footer{padding-left:calc(1.1rem + 64px)}
+}
+@media(max-width:760px){.sidenav{display:none}.brand{font-size:.95rem}.topnav .in{gap:.5rem}}
 @media(max-width:600px){
  .hero{padding-top:4.8rem;border-radius:0 0 24px 24px}
  .lvp{grid-template-columns:1fr}
@@ -119,12 +142,14 @@ section[id],header[id]{scroll-margin-top:72px}
  </div>
 </nav>
 <nav class="sidenav" aria-label="Sections">
- <a href="#top" data-nav="top" class="on" title="Overview"><span>Overview</span><b></b></a>
- <a href="#latest" data-nav="latest" title="Latest"><span>Latest</span><b></b></a>
- <a href="#trend" data-nav="trend" title="Trend"><span>Trend</span><b></b></a>
- <a href="#compare" data-nav="compare" title="Compare"><span>Compare</span><b></b></a>
- <a href="#movers" data-nav="movers" title="Movers"><span>Movers</span><b></b></a>
- <a href="#regions" data-nav="regions" title="Regions"><span>Regions</span><b></b></a>
+ <div class="ttl">On this page</div>
+ <a href="#top" data-nav="top" class="on" title="Overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Overview</span></a>
+ <a href="#latest" data-nav="latest" title="Latest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg><span>Latest</span></a>
+ <a href="#trend" data-nav="trend" title="Trend"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg><span>Trend</span></a>
+ <a href="#compare" data-nav="compare" title="Compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V10M12 21V4M19 21v-8"/></svg><span>Compare</span></a>
+ <a href="#movers" data-nav="movers" title="Movers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg><span>Movers</span></a>
+ <a href="#regions" data-nav="regions" title="Regions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Regions</span></a>
+ <div class="track"><i id="prog"></i></div>
 </nav>
 <header class="hero" id="top"><div class="wrap">
  <span class="eyebrow">Philippines &middot; Rice price tracker</span>
@@ -137,7 +162,15 @@ section[id],header[id]{scroll-margin-top:72px}
 <section class="card" id="controls" hidden>
  <span class="label">Rice variety</span>
  <div class="chips" id="chips"></div>
- <div class="row"><div class="field"><label class="label" for="region">Region</label><select id="region"></select></div></div>
+ <div class="row"><div class="field"><span class="label" id="regionLbl">Region</span>
+  <div class="dd" id="dd">
+   <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="regionLbl ddVal"><span id="ddVal">All regions (average)</span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+   <div class="dd-panel" id="ddPanel" hidden>
+    <input type="search" class="dd-q" id="ddQ" placeholder="Search a region..." aria-label="Search regions">
+    <ul class="dd-list" id="ddList" role="listbox" aria-label="Regions"></ul>
+   </div>
+  </div>
+ </div></div>
 </section>
 
 <div id="status" class="skeleton" role="status">Loading prices...</div>
@@ -216,15 +249,24 @@ async function init(){
  const last=prices.reduce((m,p)=>p.date>m?p.date:m,'');$('updated').textContent='Last updated '+fmt(last);$('updated').hidden=false;
  const counts={};prices.forEach(p=>counts[p.variety_id]=(counts[p.variety_id]||0)+1);
  state.v=+Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0]||varieties[0].id;
- $('region').innerHTML='<option value="0">All regions (average)</option>'+regions.map(r=>`<option value="${r.id}">${esc(r.name)}</option>`).join('');
- $('region').onchange=()=>{state.r=+$('region').value;render()};
+ buildDD();syncDD();
+ $('ddBtn').onclick=()=>openDD($('ddPanel').hidden);
+ $('ddQ').oninput=buildDD;
+ $('ddQ').onkeydown=e=>{const f=$('ddList').querySelector('li[data-id]');
+  if(e.key==='ArrowDown'){e.preventDefault();f&&f.focus()}
+  else if(e.key==='Enter'){e.preventDefault();f&&chooseRegion(+f.dataset.id)}};
+ $('ddList').onclick=e=>{const li=e.target.closest('li[data-id]');li&&chooseRegion(+li.dataset.id)};
+ $('ddList').onkeydown=e=>{const li=e.target.closest('li[data-id]');if(!li)return;
+  if(e.key==='ArrowDown'){e.preventDefault();li.nextElementSibling&&li.nextElementSibling.focus()}
+  else if(e.key==='ArrowUp'){e.preventDefault();(li.previousElementSibling||$('ddQ')).focus()}
+  else if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseRegion(+li.dataset.id)}};
  $('q').oninput=e=>{state.q=e.target.value.trim().toLowerCase();renderList()};
  $('clear').onclick=()=>pickRegion(0);
  $('ranges').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.range=b.dataset.r;render()};
  $('sorts').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.sort=b.dataset.s;render()};
  render()}
 
-function pickRegion(id){state.r=id;$('region').value=id;render();if(id)$('trend').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function pickRegion(id){state.r=id;syncDD();render();if(id)$('trend').scrollIntoView({behavior:'smooth',block:'nearest'})}
 
 function rowsFor(vp){return regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id),a=s[s.length-1],b=s[s.length-2];return{rg,a,b,d:a&&b?a.price_per_kg-b.price_per_kg:null}})}
 function series(vp,r){const src=r?vp.filter(p=>p.region_id===r):vp,by={};src.forEach(p=>(by[p.date]??=[]).push(+p.price_per_kg));const labels=Object.keys(by).sort();return{labels,data:labels.map(d=>by[d].reduce((a,b)=>a+b,0)/by[d].length)}}
@@ -305,6 +347,18 @@ function renderList(rows){
   return`<li class="item ${x.rg.id===state.r?'sel':''}" data-r="${x.rg.id}" tabindex="0" title="As of ${fmt(x.a.date)}"><span class="nm">${esc(x.rg.name)}</span><span class="bar"><i style="width:${w}%"></i></span><span class="pr">${peso(x.a.price_per_kg)}</span><span class="ch ${x.d>0?'up':x.d<0?'down':''}">${delta(x.d)}</span></li>`}).join(''):'<li class="empty">No regions match your search.</li>';
  $('list').querySelectorAll('.item').forEach(li=>{const go=()=>pickRegion(+li.dataset.r);li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
 
+// custom region dropdown
+function buildDD(){
+ const q=$('ddQ').value.trim().toLowerCase(),opts=[{id:0,name:'All regions (average)'},...regions].filter(o=>o.name.toLowerCase().includes(q));
+ $('ddList').innerHTML=opts.length?opts.map(o=>`<li role="option" tabindex="-1" data-id="${o.id}" aria-selected="${o.id===state.r}" class="${o.id===state.r?'sel':''}">${esc(o.name)}</li>`).join(''):'<li class="dd-empty">No regions match</li>'}
+function syncDD(){const o=state.r?regions.find(x=>x.id===state.r):null;$('ddVal').textContent=o?o.name:'All regions (average)'}
+function openDD(open){
+ $('ddPanel').hidden=!open;$('ddBtn').setAttribute('aria-expanded',open);$('dd').classList.toggle('open',open);
+ if(open){$('ddQ').value='';buildDD();const s=$('ddList').querySelector('.sel');s&&s.scrollIntoView({block:'nearest'});if(matchMedia('(pointer:fine)').matches)$('ddQ').focus()}}
+function chooseRegion(id){state.r=id;syncDD();openDD(false);$('ddBtn').focus();render()}
+document.addEventListener('click',e=>{if(!$('dd').contains(e.target))openDD(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ddPanel').hidden){openDD(false);$('ddBtn').focus()}});
+
 // top nav: hide when scrolling down, show when scrolling up (side nav never moves)
 const topnav=$('topnav');let lastY=scrollY,tick=false;
 addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{
@@ -313,6 +367,10 @@ addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()
  else if(Math.abs(d)>6){topnav.classList.toggle('hide',d>0);lastY=y}
  tick=false})},{passive:true});
 topnav.addEventListener('focusin',()=>topnav.classList.remove('hide'));
+// reading progress bar inside the side nav
+const prog=$('prog');
+function setProg(){const h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?Math.min(100,scrollY/h*100):0)+'%'}
+addEventListener('scroll',setProg,{passive:true});addEventListener('resize',setProg);setProg();
 // highlight the section currently in view in both navs
 const navLinks=document.querySelectorAll('[data-nav]');
 function setActive(id){navLinks.forEach(a=>{const on=a.dataset.nav===id;a.classList.toggle('on',on);on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')})}
