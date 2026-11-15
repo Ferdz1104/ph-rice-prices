@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Admin | Presyo ng Bigas</title>
+<style>
+:root{--ink:#1b2a20;--mute:#5d6e62;--paddy:#2e6b3f;--bg:#f6f8f2;--card:#fff;--line:#dce4d6;--bad:#b03a2e}
+@media(prefers-color-scheme:dark){:root{--ink:#e8efe6;--mute:#9db0a2;--paddy:#7bc08e;--bg:#111913;--card:#18221b;--line:#2a372d;--bad:#e57d70}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:1.25rem}
+.box{max-width:1000px;margin:auto}h1{font:700 1.8rem Georgia,serif;color:var(--paddy);margin:0 0 1rem}
+input,select,button{font:inherit;padding:.45rem;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);max-width:100%}
+button{cursor:pointer;background:var(--paddy);color:#fff;border-color:var(--paddy)}button.del{background:transparent;color:var(--bad);border-color:var(--bad)}
+button.tab{background:var(--card);color:var(--ink);border-color:var(--line)}button.tab.on{background:var(--paddy);color:#fff}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}.grow{flex:1}
+.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:.4rem;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mute);font-size:.85rem}tr.new{background:color-mix(in srgb,var(--paddy) 10%,transparent)}
+#msg{min-height:1.5rem;color:var(--mute)}#login{max-width:320px;margin:4rem auto;display:flex;flex-direction:column;gap:.6rem}
+</style></head><body><div class="box">
+<h1>Admin</h1>
+<form id="login"><input id="email" type="email" placeholder="Email" autocomplete="username" required><input id="pw" type="password" placeholder="Password" autocomplete="current-password" required><button>Sign in</button><p id="lmsg" role="alert"></p></form>
+<div id="app" hidden>
+<div class="bar"><button class="tab on" data-t="prices">Prices</button><button class="tab" data-t="regions">Regions</button><button class="tab" data-t="varieties">Varieties</button><span class="grow"></span><a href="index.html">View public site</a><button id="out" class="del">Sign out</button></div>
+<p id="msg" role="status"></p>
+<div class="wrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
+<p style="color:var(--mute)">Prices tab shows the 200 most recent entries. The shaded top row adds a new entry.</p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const T={prices:[['date','date'],['region_id','ref:regions'],['variety_id','ref:varieties'],['price_per_kg','number'],['source','text']],
+ regions:[['name','text'],['sort_order','number']],varieties:[['name','text']]};
+let tab='prices',refs={regions:[],varieties:[]};
+const msg=t=>$('msg').textContent=t;
+async function start(){
+ const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ const{data:ok}=await sb.rpc('is_admin');
+ if(!ok){await sb.auth.signOut();$('lmsg').textContent='This account is not an admin.';return}
+ $('login').hidden=true;$('app').hidden=false;load()}
+$('login').onsubmit=async e=>{e.preventDefault();const{error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('pw').value});
+ if(error){$('lmsg').textContent='Sign-in failed: '+error.message;return}start()};
+$('out').onclick=async()=>{await sb.auth.signOut();location.reload()};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));load()});
+function cell(c,t,v){
+ if(t.startsWith('ref:'))return`<select data-c="${c}" data-t="ref">${refs[t.slice(4)].map(o=>`<option value="${o.id}" ${o.id==v?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
+ return`<input data-c="${c}" data-t="${t}" type="${t}" ${t==='number'?'step="any"':''} value="${esc(v)}">`}
+async function load(){
+ msg('Loading...');
+ refs.regions=(await sb.from('regions').select('*').order('sort_order')).data||[];
+ refs.varieties=(await sb.from('varieties').select('*').order('name')).data||[];
+ let q=sb.from(tab).select('*');q=tab==='prices'?q.order('date',{ascending:false}).limit(200):q.order(tab==='regions'?'sort_order':'name');
+ const{data,error}=await q;if(error)return msg(error.message);
+ $('head').innerHTML='<tr>'+T[tab].map(c=>`<th>${c[0].replace(/_/g,' ')}</th>`).join('')+'<th></th></tr>';
+ const blank=tab==='prices'?{date:new Date().toISOString().slice(0,10)}:{};
+ $('body').innerHTML=[blank,...data].map(r=>`<tr data-id="${r.id??''}" class="${r.id?'':'new'}">`+T[tab].map(([c,t])=>`<td>${cell(c,t,r[c])}</td>`).join('')+
+  `<td><button data-a="save">${r.id?'Save':'Add'}</button> ${r.id?'<button class="del" data-a="del">Delete</button>':''}</td></tr>`).join('');
+ msg('')}
+$('body').onclick=async e=>{const a=e.target.dataset.a;if(!a)return;const tr=e.target.closest('tr'),id=tr.dataset.id;let r;
+ if(a==='del'){if(!confirm('Delete this entry? This cannot be undone.'))return;r=await sb.from(tab).delete().eq('id',id)}
+ else{const row={};tr.querySelectorAll('[data-c]').forEach(el=>{const v=el.value;row[el.dataset.c]=v===''?null:(el.dataset.t==='number'||el.dataset.t==='ref'?Number(v):v)});
+  r=id?await sb.from(tab).update(row).eq('id',id):await sb.from(tab).insert(row)}
+ if(r.error)return msg('Error: '+r.error.message);await load();msg(a==='del'?'Deleted.':'Saved.')};
+start();
+</script></body></html>
