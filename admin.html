@@ -1,77 +1,246 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex"><title>Admin | Presyo ng Bigas</title>
+<meta name="robots" content="noindex,nofollow"><title>Manage | Presyo ng Bigas</title>
 <style>
-:root{--bg:#fff;--ink:#111;--mute:#6b7280;--line:#e5e7eb;--accent:#1f7a4d;--bad:#b91c1c}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0f0e;--ink:#f3f4f3;--mute:#9ca3a0;--line:#26292a;--accent:#4ade80;--bad:#f87171}}
+:root{--bg:#f5f6fa;--card:#fff;--ink:#1f2937;--mute:#6b7280;--line:#e8eaf0;--accent:#6366f1;--soft:#eef0ff;--bad:#dc2626;--ok:#12a36b;--shadow:0 1px 2px rgba(16,24,40,.04);--sw:15rem}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1117;--card:#171a22;--ink:#e8eaf0;--mute:#9aa1b0;--line:#252a35;--accent:#8b8ffa;--soft:#1e2140;--bad:#f87171;--ok:#34d399;--shadow:none}}
+:root[data-theme=dark]{--bg:#0f1117;--card:#171a22;--ink:#e8eaf0;--mute:#9aa1b0;--line:#252a35;--accent:#8b8ffa;--soft:#1e2140;--bad:#f87171;--ok:#34d399;--shadow:none}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:2rem 1.25rem}
-.box{max-width:min(1800px,100%);margin:0 auto}
-h1{font-size:1.1rem;font-weight:600;margin:0 0 1.5rem}
-a{color:var(--accent)}
-input,select,button{font:inherit;padding:.5rem .65rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+html{font-size:clamp(15px,.45vw + 8px,19px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit;color:inherit}
+svg.i{width:1.1em;height:1.1em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#gate{text-align:center;color:var(--mute);margin-top:25vh}
+#shell[hidden]{display:none}
+
+.side{position:fixed;inset:0 auto 0 0;width:var(--sw);background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:70;transition:transform .25s ease;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:.7rem;padding:1rem 1rem .9rem;border-bottom:1px solid var(--line)}
+.logo{width:2.3rem;height:2.3rem;border-radius:.7rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:grid;place-items:center;font-size:1.2rem}
+.brand b{display:block;line-height:1.15}
+.brand small{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sec{padding:1rem .75rem .3rem}
+.sec h6{margin:0 0 .4rem .5rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.nav button,.nav a{display:flex;align-items:center;gap:.7rem;width:100%;padding:.55rem .7rem;border-radius:.6rem;color:var(--ink);text-decoration:none;font-size:.92rem;margin-bottom:2px;background:none;border:0;cursor:pointer;text-align:left}
+.nav svg{color:var(--mute)}
+.nav button:hover,.nav a:hover{background:var(--bg)}
+.nav button.on{background:var(--soft);color:var(--accent);font-weight:600}
+.nav button.on svg{color:var(--accent)}
+.sidefoot{margin-top:auto;padding:1rem;font-size:.78rem;color:var(--mute);border-top:1px solid var(--line)}
+.scrim{display:none}
+.main{margin-left:var(--sw);min-height:100vh;transition:margin .25s}
+body.collapsed .side{transform:translateX(-100%)}body.collapsed .main{margin-left:0}
+.top{position:sticky;top:0;z-index:50;height:3.7rem;background:color-mix(in srgb,var(--card) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:.7rem;padding:0 1.25rem}
+.ib{width:2.3rem;height:2.3rem;border-radius:.6rem;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--mute)}
+.ib:hover{color:var(--accent);border-color:var(--accent)}
+.search{position:relative;flex:0 1 24rem;min-width:0}
+.search svg{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--mute)}
+.search input{width:100%;font-size:.9rem;padding:.55rem .8rem .55rem 2.3rem;border:1px solid var(--line);border-radius:.6rem;background:var(--bg)}
+.sp{flex:1}
+.who{display:flex;align-items:center;gap:.55rem;padding:.25rem .7rem .25rem .3rem;border:1px solid var(--line);border-radius:.7rem;background:var(--card);font-size:.82rem;line-height:1.15;max-width:15rem}
+.who i{width:1.9rem;height:1.9rem;border-radius:.5rem;background:var(--accent);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.75rem;flex:none}
+.who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who small{display:block;color:var(--mute);font-size:.68rem}
+
+.page{padding:1.25rem 1.5rem 2.5rem}
+.crumb{display:flex;align-items:center;gap:.45rem;color:var(--mute);font-size:.85rem;margin-bottom:.9rem}
+.titlebar{margin-bottom:1.1rem}
+h1{font-size:1.55rem;margin:0;letter-spacing:-.02em}
+.titlebar p{margin:.15rem 0 0;color:var(--mute);font-size:.92rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1rem;margin-bottom:1rem}
+.kpi{position:relative;color:#fff;border-radius:.9rem;padding:1rem 1.2rem;overflow:hidden}
+.kpi::after{content:"";position:absolute;right:-1.5rem;top:-1.5rem;width:5.5rem;height:5.5rem;border-radius:50%;background:rgba(255,255,255,.12)}
+.kpi .k{font-size:.8rem;opacity:.92}.kpi .v{font-size:1.7rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.k1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.k2{background:linear-gradient(135deg,#10b981,#059669)}.k3{background:linear-gradient(135deg,#06b6d4,#0891b2)}.k4{background:linear-gradient(135deg,#f97316,#ef4444)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:1.1rem 1.2rem;box-shadow:var(--shadow);margin-bottom:1rem;min-width:0}
+.head{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+h2{font-size:.98rem;margin:0;display:flex;align-items:center;gap:.5rem}
+h2 svg{color:var(--accent)}
+.hint{margin:.15rem 0 0;font-size:.8rem;color:var(--mute)}
+.lbl{display:block;font-size:.7rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+input,select{width:100%;padding:.5rem .65rem;border:1px solid var(--line);border-radius:.6rem;background:var(--card);min-width:0}
 input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
 select{appearance:none;-webkit-appearance:none;padding-right:2rem;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .55rem center;background-size:16px}
 select:hover{border-color:var(--accent)}
-button{cursor:pointer;background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:500}
-button.del{background:transparent;color:var(--bad);border-color:var(--line)}
-button.tab{background:transparent;color:var(--mute);border-color:transparent}
-button.tab.on{color:var(--ink);border-color:var(--line)}
-.bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}.grow{flex:1}
-.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
-table{border-collapse:collapse;width:100%;min-width:640px}
-th,td{padding:.5rem;border-bottom:1px solid var(--line);text-align:left}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.5rem 1rem;border-radius:.6rem;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-weight:600;font-size:.9rem;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:default;filter:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);font-weight:500}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn.del{background:transparent;color:var(--bad);border-color:var(--line);font-weight:500}
+.btn.del:hover{border-color:var(--bad)}
+.btn.sm{padding:.35rem .7rem;font-size:.82rem}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:.8rem;align-items:end}
+.filters{display:flex;flex-wrap:wrap;gap:.6rem}.filters>*{flex:1;min-width:10rem;max-width:18rem}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:.7rem}
+table{border-collapse:collapse;width:100%;min-width:44rem}
+th,td{padding:.45rem .55rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
 tr:last-child td{border-bottom:0}
-th{color:var(--mute);font-weight:500;font-size:.85rem;text-transform:capitalize}
-tr.new{background:color-mix(in srgb,var(--accent) 8%,transparent)}
-#msg{min-height:1.5rem;color:var(--mute)}
-.hint{color:var(--mute);font-size:.85rem}
-#checking{color:var(--mute);text-align:center;margin-top:4rem}
-</style></head><body><div class="box">
-<p id="checking">Checking sign-in...</p>
-<div id="app" hidden>
-<h1>Admin</h1>
-<div class="bar"><button class="tab on" data-t="prices">Prices</button><button class="tab" data-t="regions">Regions</button><button class="tab" data-t="varieties">Varieties</button><span class="grow"></span><a href="index.html">View public site</a><button id="out" class="del">Sign out</button></div>
-<p id="msg" role="status"></p>
-<div class="wrap"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
-<p class="hint">Prices shows the 200 most recent entries. The shaded top row adds a new entry.</p>
+th{color:var(--mute);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;background:var(--bg);white-space:nowrap}
+tr.dirty td{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+td.act{white-space:nowrap;width:1%}
+td.act .btn+.btn{margin-left:.3rem}
+.empty{padding:2rem 0;text-align:center;color:var(--mute)}
+.count{font-size:.82rem;color:var(--mute)}
+#toast{position:fixed;right:1.25rem;bottom:1.25rem;z-index:90;display:flex;flex-direction:column;gap:.5rem}
+.t{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);padding:.65rem 1rem;border-radius:.6rem;box-shadow:0 10px 30px rgba(10,15,40,.2);font-size:.9rem;animation:tin .2s ease;max-width:22rem}
+.t.err{border-left-color:var(--bad)}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:900px){
+ .main{margin-left:0}.side{transform:translateX(-100%)}
+ body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.3)}
+ body.collapsed .side{transform:translateX(-100%)}body.nav-open.collapsed .side{transform:none}
+ .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:65;opacity:0;pointer-events:none;transition:opacity .2s}
+ body.nav-open .scrim{opacity:1;pointer-events:auto}
+ .page{padding:1rem}.top{padding:0 .8rem}.who span{display:none}.who{padding:.25rem}
+}
+</style></head><body>
+<p id="gate">Checking sign-in...</p>
+<div id="shell" hidden>
+<aside class="side" aria-label="Sidebar">
+ <div class="brand"><span class="logo">&#127806;</span><span><b>Presyo ng Bigas</b><small>Manage data</small></span></div>
+ <div class="sec"><h6>Manage</h6><nav class="nav" id="tabs">
+  <button data-t="prices" class="on"><svg class="i" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Prices</button>
+  <button data-t="regions"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Regions</button>
+  <button data-t="varieties"><svg class="i" viewBox="0 0 24 24"><path d="M12 22V9M12 9c0-3 2-5 5-5 0 3-2 5-5 5zM12 13c0-3-2-5-5-5 0 3 2 5 5 5zM12 17c0-3 2-5 5-5 0 3-2 5-5 5z"/></svg>Varieties</button>
+ </nav></div>
+ <div class="sec"><h6>Site</h6><nav class="nav"><a href="index.html"><svg class="i" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>View public site</a></nav></div>
+ <div class="sidefoot">Changes save to the live database.</div>
+</aside>
+<div class="scrim" id="scrim"></div>
+<div class="main">
+ <header class="top">
+  <button class="ib" id="menu" aria-label="Toggle menu"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+  <label class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="gq" type="search" placeholder="Filter this list..." aria-label="Filter rows"></label>
+  <span class="sp"></span>
+  <button class="ib" id="theme" aria-label="Toggle dark mode"><svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  <div class="who"><i id="av">A</i><span id="em">Admin<small>Signed in</small></span></div>
+  <button class="btn ghost sm" id="out">Sign out</button>
+ </header>
+ <main class="page">
+  <div class="crumb"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg> &rsaquo; <span>Manage</span> &rsaquo; <span id="crumb">Prices</span></div>
+  <div class="titlebar"><h1 id="title">Prices</h1><p id="sub"></p></div>
+  <div class="kpis">
+   <div class="kpi k1"><div class="k">Price entries</div><div class="v" id="n1">-</div></div>
+   <div class="kpi k2"><div class="k">Latest price date</div><div class="v" id="n2">-</div></div>
+   <div class="kpi k3"><div class="k">Regions</div><div class="v" id="n3">-</div></div>
+   <div class="kpi k4"><div class="k">Varieties</div><div class="v" id="n4">-</div></div>
+  </div>
+  <section class="card"><div class="head"><h2><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span id="addTitle">Add new</span></h2></div><form class="form" id="addForm"></form></section>
+  <section class="card">
+   <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span id="listTitle">Entries</span></h2><p class="hint" id="hint"></p></div><span class="count" id="count"></span></div>
+   <div class="filters" id="filters" hidden></div>
+   <div class="wrap" style="margin-top:.8rem"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
+   <p class="empty" id="none" hidden>Nothing here yet.</p>
+  </section>
+ </main>
 </div></div>
+<div id="toast" aria-live="polite"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
 <script>
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const T={prices:[['date','date'],['region_id','ref:regions'],['variety_id','ref:varieties'],['price_per_kg','number'],['source','text']],
- regions:[['name','text'],['sort_order','number']],varieties:[['name','text']]};
-let tab='prices',refs={regions:[],varieties:[]};
-const msg=t=>$('msg').textContent=t;
-// Gate: only signed-in admins may see this page, everyone else goes to login.html
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const th=store.get('theme');if(th)document.documentElement.setAttribute('data-theme',th);
+
+// field definitions: [column, label, type, required]
+const T={
+ prices:{title:'Prices',sub:'Add and correct the rice price for each region, variety and date.',add:'Add a price',list:'Price entries',
+  f:[['date','Date','date',1],['region_id','Region','ref:regions',1],['variety_id','Variety','ref:varieties',1],['price_per_kg','Price per kg (PHP)','number',1],['source','Source','text',0]]},
+ regions:{title:'Regions',sub:'The areas shown on the public page. Sort order controls the list order.',add:'Add a region',list:'Regions',
+  f:[['name','Name','text',1],['sort_order','Sort order','number',0]]},
+ varieties:{title:'Varieties',sub:'The rice varieties people can choose from.',add:'Add a variety',list:'Varieties',
+  f:[['name','Name','text',1]]}
+};
+let tab='prices',refs={regions:[],varieties:[]},rows=[],fv='',fr='';
+
+function toast(m,err){const d=document.createElement('div');d.className='t'+(err?' err':'');d.textContent=m;$('toast').appendChild(d);setTimeout(()=>d.remove(),err?5000:2600)}
+function friendly(e){const m=e.message||String(e);
+ if(/duplicate key|unique/i.test(m))return tab==='prices'?'That region, variety and date already has a price. Edit the existing entry instead.':'That name already exists.';
+ if(/row-level security|permission/i.test(m))return 'Not allowed. Make sure you are signed in as an admin.';
+ if(/violates check/i.test(m))return 'The price must be greater than 0.';
+ return m}
+
+// ---------- gate ----------
 async function start(){
  const{data:{session}}=await sb.auth.getSession();
  if(!session){location.replace('login.html');return}
  const{data:ok}=await sb.rpc('is_admin');
  if(!ok){await sb.auth.signOut();location.replace('login.html?denied=1');return}
- $('checking').hidden=true;$('app').hidden=false;load()}
+ const email=session.user.email||'Admin';$('av').textContent=email[0].toUpperCase();$('em').innerHTML=esc(email)+'<small>Signed in</small>';
+ $('gate').hidden=true;$('shell').hidden=false;load()}
 $('out').onclick=async()=>{await sb.auth.signOut();location.replace('login.html')};
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));load()});
-function cell(c,t,v){
+$('menu').onclick=()=>{if(matchMedia('(max-width:900px)').matches)document.body.classList.toggle('nav-open');else document.body.classList.toggle('collapsed')};
+$('scrim').onclick=()=>document.body.classList.remove('nav-open');
+$('theme').onclick=()=>{const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');const nx=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',nx);store.set('theme',nx)};
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;fv=fr='';$('gq').value='';
+ document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));document.body.classList.remove('nav-open');load()};
+$('gq').oninput=draw;
+
+// ---------- inputs ----------
+function field(c,t,v,id){
  if(t.startsWith('ref:'))return`<select data-c="${c}" data-t="ref">${refs[t.slice(4)].map(o=>`<option value="${o.id}" ${o.id==v?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
- return`<input data-c="${c}" data-t="${t}" type="${t}" ${t==='number'?'step="any"':''} value="${esc(v)}">`}
+ return`<input ${id?`id="${id}" `:''}data-c="${c}" data-t="${t}" type="${t}" ${t==='number'?'step="any" min="0"':''} value="${esc(v)}">`}
+function collect(root){const row={};let bad='';
+ root.querySelectorAll('[data-c]').forEach(el=>{const def=T[tab].f.find(f=>f[0]===el.dataset.c),v=el.value.trim();
+  if(def[3]&&v==='')bad=bad||def[1]+' is required.';
+  row[el.dataset.c]=v===''?null:(el.dataset.t==='number'||el.dataset.t==='ref'?Number(v):v)});
+ if(tab==='prices'&&!(row.price_per_kg>0))bad=bad||'Price must be greater than 0.';
+ return{row,bad}}
+
+// ---------- load + draw ----------
 async function load(){
- msg('Loading...');
- refs.regions=(await sb.from('regions').select('*').order('sort_order')).data||[];
- refs.varieties=(await sb.from('varieties').select('*').order('name')).data||[];
- let q=sb.from(tab).select('*');q=tab==='prices'?q.order('date',{ascending:false}).limit(200):q.order(tab==='regions'?'sort_order':'name');
- const{data,error}=await q;if(error)return msg(error.message);
- $('head').innerHTML='<tr>'+T[tab].map(c=>`<th>${c[0].replace(/_/g,' ')}</th>`).join('')+'<th></th></tr>';
+ const d=T[tab];
+ $('title').textContent=$('crumb').textContent=d.title;$('sub').textContent=d.sub;$('addTitle').textContent=d.add;$('listTitle').textContent=d.list;
+ const[r,v,n,l]=await Promise.all([sb.from('regions').select('*').order('sort_order'),sb.from('varieties').select('*').order('name'),
+  sb.from('prices').select('*',{count:'exact',head:true}),sb.from('prices').select('date').order('date',{ascending:false}).limit(1)]);
+ refs.regions=r.data||[];refs.varieties=v.data||[];
+ $('n1').textContent=n.count??'-';$('n2').textContent=l.data&&l.data[0]?l.data[0].date:'None';$('n3').textContent=refs.regions.length;$('n4').textContent=refs.varieties.length;
+ // add form
  const blank=tab==='prices'?{date:new Date().toISOString().slice(0,10)}:{};
- $('body').innerHTML=[blank,...data].map(r=>`<tr data-id="${r.id??''}" class="${r.id?'':'new'}">`+T[tab].map(([c,t])=>`<td>${cell(c,t,r[c])}</td>`).join('')+
-  `<td><button data-a="save">${r.id?'Save':'Add'}</button> ${r.id?'<button class="del" data-a="del">Delete</button>':''}</td></tr>`).join('');
- msg('')}
-$('body').onclick=async e=>{const a=e.target.dataset.a;if(!a)return;const tr=e.target.closest('tr'),id=tr.dataset.id;let r;
- if(a==='del'){if(!confirm('Delete this entry? This cannot be undone.'))return;r=await sb.from(tab).delete().eq('id',id)}
- else{const row={};tr.querySelectorAll('[data-c]').forEach(el=>{const v=el.value;row[el.dataset.c]=v===''?null:(el.dataset.t==='number'||el.dataset.t==='ref'?Number(v):v)});
-  r=id?await sb.from(tab).update(row).eq('id',id):await sb.from(tab).insert(row)}
- if(r.error)return msg('Error: '+r.error.message);await load();msg(a==='del'?'Deleted.':'Saved.')};
+ $('addForm').innerHTML=d.f.map(([c,lb,t])=>`<div><span class="lbl">${lb}</span>${field(c,t,blank[c]??'')}</div>`).join('')+'<div><button class="btn" type="submit">Add</button></div>';
+ // filters (prices only)
+ const F=$('filters');F.hidden=tab!=='prices';
+ if(tab==='prices'){F.innerHTML=`<select id="fv" aria-label="Filter by variety"><option value="">All varieties</option>${refs.varieties.map(o=>`<option value="${o.id}" ${o.id==fv?'selected':''}>${esc(o.name)}</option>`).join('')}</select><select id="fr" aria-label="Filter by region"><option value="">All regions</option>${refs.regions.map(o=>`<option value="${o.id}" ${o.id==fr?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
+  $('fv').onchange=e=>{fv=e.target.value;fetchRows()};$('fr').onchange=e=>{fr=e.target.value;fetchRows()}}
+ await fetchRows()}
+
+async function fetchRows(){
+ let q=sb.from(tab).select('*');
+ if(tab==='prices'){if(fv)q=q.eq('variety_id',fv);if(fr)q=q.eq('region_id',fr);q=q.order('date',{ascending:false}).order('id',{ascending:false}).limit(200)}
+ else q=q.order(tab==='regions'?'sort_order':'name');
+ const{data,error}=await q;if(error){toast(friendly(error),1);return}
+ rows=data||[];draw()}
+
+function draw(){
+ const d=T[tab],q=$('gq').value.trim().toLowerCase(),nm=(list,id)=>(list.find(x=>x.id==id)||{}).name||'';
+ const list=rows.filter(r=>!q||(tab==='prices'?[r.source,nm(refs.regions,r.region_id),nm(refs.varieties,r.variety_id),r.date].join(' '):r.name).toLowerCase().includes(q));
+ $('head').innerHTML='<tr>'+d.f.map(f=>`<th>${f[1]}</th>`).join('')+'<th></th></tr>';
+ $('body').innerHTML=list.map(r=>`<tr data-id="${r.id}">`+d.f.map(([c,,t])=>`<td>${field(c,t,r[c])}</td>`).join('')+
+  '<td class="act"><button class="btn sm" data-a="save" disabled>Save</button><button class="btn del sm" data-a="del">Delete</button></td></tr>').join('');
+ $('none').hidden=list.length>0;$('none').textContent=rows.length?'No matches for your filter.':'Nothing here yet.';
+ $('count').textContent=tab==='prices'?`Showing ${list.length} of the latest ${rows.length} (max 200)`:`${list.length} total`;
+ $('hint').textContent=tab==='prices'?'Edit a cell, then press Save on that row.':'Edit a name, then press Save on that row.'}
+
+// ---------- actions ----------
+$('body').addEventListener('input',e=>{const tr=e.target.closest('tr');if(!tr)return;tr.classList.add('dirty');tr.querySelector('[data-a=save]').disabled=false});
+$('body').onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const tr=b.closest('tr'),id=tr.dataset.id;
+ if(b.dataset.a==='del'){
+  const warn=tab==='prices'?'Delete this price? This cannot be undone.':`Delete this ${tab==='regions'?'region':'variety'} and ALL of its prices? This cannot be undone.`;
+  if(!confirm(warn))return;b.disabled=true;
+  const{error}=await sb.from(tab).delete().eq('id',id);if(error){toast(friendly(error),1);b.disabled=false;return}
+  toast('Deleted.');load();return}
+ const{row,bad}=collect(tr);if(bad){toast(bad,1);return}
+ b.disabled=true;b.textContent='Saving...';
+ const{error}=await sb.from(tab).update(row).eq('id',id);
+ if(error){toast(friendly(error),1);b.disabled=false;b.textContent='Save';return}
+ toast('Saved.');load()};
+$('addForm').onsubmit=async e=>{e.preventDefault();const{row,bad}=collect($('addForm'));if(bad){toast(bad,1);return}
+ const btn=$('addForm').querySelector('button');btn.disabled=true;
+ const{error}=await sb.from(tab).insert(row);btn.disabled=false;
+ if(error){toast(friendly(error),1);return}
+ toast('Added.');load()};
 start();
 </script></body></html>
