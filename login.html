@@ -30,8 +30,11 @@ a{color:var(--mute);font-size:.85rem}
 <script>
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
 async function isAdmin(){const{data}=await sb.rpc('is_admin');return !!data}
+const MAX_MS=24*60*60*1000;
+const expired=s=>!s||!s.user||!(Date.now()-new Date(s.user.last_sign_in_at).getTime()<=MAX_MS);
 async function check(){
  const{data:{session}}=await sb.auth.getSession();if(!session)return;
+ if(expired(session)){await sb.auth.signOut();$('lmsg').textContent='Your session expired. Please sign in again.';return}
  if(await isAdmin())location.replace('admin.html');
  else{await sb.auth.signOut();$('lmsg').textContent='This account is not an admin.'}}
 $('login').onsubmit=async e=>{
@@ -39,6 +42,8 @@ $('login').onsubmit=async e=>{
  const{error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('pw').value});
  if(error){$('lmsg').textContent='Sign-in failed: '+error.message;$('go').disabled=false;return}
  await check();$('go').disabled=false};
-if(new URLSearchParams(location.search).get('denied'))$('lmsg').textContent='This account is not an admin.';
+const qs=new URLSearchParams(location.search);
+if(qs.get('denied'))$('lmsg').textContent='This account is not an admin.';
+if(qs.get('expired'))$('lmsg').textContent='Your session expired. Please sign in again.';
 check();
 </script></body></html>
