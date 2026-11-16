@@ -3,229 +3,250 @@
 <title>Presyo ng Bigas | Philippine Rice Prices</title>
 <meta name="description" content="Rice prices per kilo in every region of the Philippines, by variety.">
 <style>
-:root{--w:min(2400px,100%);--bg:#f3f6ef;--card:#fff;--ink:#14201a;--mute:#65736a;--line:#e3e9dd;--accent:#1f7a4d;--soft:#e8f4ec;--gold:#d9a521;--up:#c2410c;--down:#1f7a4d;--prev:#b7c3b9;--shadow:0 6px 24px rgba(20,60,35,.08);--h1:#0f4a2a;--h2:#1f7a4d;--h3:#6aa84f}
-@media(prefers-color-scheme:dark){:root{--bg:#0b100c;--card:#141b16;--ink:#eef4ee;--mute:#97a79b;--line:#232d26;--accent:#4ade80;--soft:#15291d;--gold:#f2c14e;--up:#fb923c;--down:#4ade80;--prev:#4a5a4f;--shadow:none;--h1:#06210f;--h2:#0f4a2a;--h3:#2d6a35}}
+:root{--bg:#f5f6fa;--card:#fff;--ink:#1f2937;--mute:#6b7280;--line:#e8eaf0;--accent:#6366f1;--soft:#eef0ff;--up:#e8590c;--down:#12a36b;--prev:#c7cbd6;--bar:#8b5cf6;--shadow:0 1px 2px rgba(16,24,40,.04);--sw:15rem}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1117;--card:#171a22;--ink:#e8eaf0;--mute:#9aa1b0;--line:#252a35;--accent:#8b8ffa;--soft:#1e2140;--up:#fb923c;--down:#34d399;--prev:#3a4152;--bar:#a78bfa;--shadow:none}}
+:root[data-theme=dark]{--bg:#0f1117;--card:#171a22;--ink:#e8eaf0;--mute:#9aa1b0;--line:#252a35;--accent:#8b8ffa;--soft:#1e2140;--up:#fb923c;--down:#34d399;--prev:#3a4152;--bar:#a78bfa;--shadow:none}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:clamp(16px,.55vw + 8px,22px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.hero{background:linear-gradient(135deg,var(--h1),var(--h2) 60%,var(--h3));color:#fff;padding:5.6rem 1.1rem 5.5rem;position:relative;overflow:hidden;border-radius:0 0 32px 32px}
-.hero::before{content:"\1F33E";position:absolute;right:-10px;top:-20px;font-size:12rem;opacity:.12;transform:rotate(-12deg)}
-.hero::after{content:"\1F33E";position:absolute;right:130px;bottom:-60px;font-size:7rem;opacity:.1;transform:rotate(18deg)}
-.wrap{max-width:var(--w);margin:0 auto;position:relative;z-index:1}
-.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.16);padding:.25rem .8rem;border-radius:999px;margin-bottom:.9rem}
-h1{font-size:clamp(2.2rem,8vw,3.4rem);line-height:1.05;margin:0 0 .6rem;letter-spacing:-.03em}
-h1 span{color:#ffe08a}
-.hero p{margin:0;max-width:54ch;opacity:.92;font-size:1.05rem}
-.updated{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.1rem;font-size:.85rem;background:rgba(255,255,255,.18);padding:.3rem .8rem;border-radius:999px}
-.updated::before{content:"";width:8px;height:8px;border-radius:50%;background:#7dffa8;box-shadow:0 0 0 3px rgba(125,255,168,.25)}
-main{max-width:var(--w);margin:-3.2rem auto 0;padding:0 1.1rem 1rem;position:relative;z-index:2}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1.2rem;margin-bottom:1.1rem;box-shadow:var(--shadow)}
-.label{display:block;font-size:.76rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.55rem}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem}
-.chip,.seg button{font:inherit;font-size:.9rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:.45rem .95rem;border-radius:999px;transition:.15s}
-.chip:hover,.seg button:hover{border-color:var(--accent);transform:translateY(-1px)}
-.chip[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--card);font-weight:600;box-shadow:0 4px 12px rgba(31,122,77,.3)}
-.row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.1rem}
-.field{flex:1;min-width:220px}
-select,input[type=search]{width:100%;font:inherit;padding:.65rem .8rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
-select:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.85rem;margin-bottom:1.1rem}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1rem 1.1rem;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--accent))}
-.stat .ic{font-size:1.25rem}
-.stat .k{font-size:.74rem;color:var(--mute);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:.15rem}
-.stat .v{font-size:clamp(1.6rem,5vw,2rem);font-weight:800;letter-spacing:-.03em;line-height:1.15}
-.stat .s{font-size:.82rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.head{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;align-items:flex-start;margin-bottom:.9rem}
-h2{font-size:1.15rem;margin:0;letter-spacing:-.01em}
-.hint{margin:.15rem 0 0;font-size:.84rem;color:var(--mute)}
-.seg{display:flex;gap:.35rem;flex-wrap:wrap}
-.seg button{padding:.28rem .75rem;font-size:.82rem}
-.chartbox{position:relative;height:clamp(250px,26vw,620px)}
-.clear{font:inherit;font-size:.82rem;color:var(--accent);background:none;border:0;cursor:pointer;padding:0;text-decoration:underline}
-.lvp{display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:stretch}
-.box{border-radius:14px;padding:1rem;border:1px solid var(--line);background:var(--bg)}
+html{scroll-behavior:smooth;font-size:clamp(15px,.5vw + 8px,21px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit}
+svg.i{width:1.1em;height:1.1em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* sidebar */
+.side{position:fixed;inset:0 auto 0 0;width:var(--sw);background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:70;transition:transform .25s ease;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:.7rem;padding:1rem 1rem .9rem;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.logo{width:2.3rem;height:2.3rem;border-radius:.7rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:grid;place-items:center;font-size:1.2rem}
+.brand b{display:block;line-height:1.15;font-size:1rem}
+.brand small{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sec{padding:1rem .75rem .3rem}
+.sec h6{margin:0 0 .4rem .5rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.nav a{display:flex;align-items:center;gap:.7rem;padding:.55rem .7rem;border-radius:.6rem;color:var(--ink);text-decoration:none;font-size:.92rem;margin-bottom:2px}
+.nav a svg{color:var(--mute)}
+.nav a:hover{background:var(--bg)}
+.nav a.on{background:var(--soft);color:var(--accent);font-weight:600}
+.nav a.on svg{color:var(--accent)}
+.sidefoot{margin-top:auto;padding:1rem;font-size:.78rem;color:var(--mute);border-top:1px solid var(--line)}
+.scrim{display:none}
+
+/* main + topbar */
+.main{margin-left:var(--sw);min-height:100vh;transition:margin .25s ease}
+body.collapsed .side{transform:translateX(-100%)}
+body.collapsed .main{margin-left:0}
+.top{position:sticky;top:0;z-index:50;height:3.7rem;background:color-mix(in srgb,var(--card) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:.7rem;padding:0 1.25rem}
+.ib{width:2.3rem;height:2.3rem;border-radius:.6rem;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--mute);text-decoration:none}
+.ib:hover{color:var(--accent);border-color:var(--accent)}
+.search{position:relative;flex:0 1 26rem;min-width:0}
+.search svg{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--mute)}
+.search input{width:100%;font:inherit;font-size:.9rem;padding:.55rem 3.4rem .55rem 2.3rem;border:1px solid var(--line);border-radius:.6rem;background:var(--bg);color:var(--ink)}
+.search input:focus{outline:2px solid var(--accent);outline-offset:1px;background:var(--card)}
+.search kbd{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);font:inherit;font-size:.7rem;color:var(--mute);border:1px solid var(--line);background:var(--card);border-radius:.35rem;padding:.05rem .4rem}
+.sp{flex:1}
+.upd{display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;color:var(--mute);border:1px solid var(--line);background:var(--card);border-radius:999px;padding:.3rem .8rem;white-space:nowrap}
+.upd::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--down);box-shadow:0 0 0 3px color-mix(in srgb,var(--down) 25%,transparent)}
+
+/* page */
+.page{padding:1.25rem 1.5rem 2rem}
+.crumb{display:flex;align-items:center;gap:.45rem;color:var(--mute);font-size:.85rem;margin-bottom:.9rem}
+.titlebar{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:flex-end;margin-bottom:1.1rem}
+h1{font-size:1.55rem;margin:0;letter-spacing:-.02em}
+.titlebar p{margin:.15rem 0 0;color:var(--mute);font-size:.92rem}
+.lbl{display:block;font-size:.7rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem}
+.field{min-width:15rem}
+section[id]{scroll-margin-top:4.6rem}
+
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem;margin-bottom:1rem}
+.kpi{position:relative;color:#fff;border-radius:.9rem;padding:1.1rem 1.2rem;overflow:hidden;min-height:7.2rem}
+.kpi::after{content:"";position:absolute;right:-1.5rem;top:-1.5rem;width:6rem;height:6rem;border-radius:50%;background:rgba(255,255,255,.12)}
+.kpi .k{font-size:.82rem;opacity:.92}
+.kpi .v{font-size:clamp(1.6rem,2.2vw,2.2rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:.25rem 0}
+.kpi .s{font-size:.78rem;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .ico{position:absolute;right:1rem;top:1rem;z-index:1;width:2.2rem;height:2.2rem;border-radius:.6rem;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.k1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.k2{background:linear-gradient(135deg,#10b981,#059669)}.k3{background:linear-gradient(135deg,#06b6d4,#0891b2)}.k4{background:linear-gradient(135deg,#f97316,#ef4444)}
+
+/* variety tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.8rem;margin-bottom:1rem}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:.8rem;padding:.9rem .8rem;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:.15s}
+.tile:hover{border-color:var(--accent);transform:translateY(-1px)}
+.tile[aria-pressed=true]{border-color:var(--accent);background:var(--soft);box-shadow:0 0 0 1px var(--accent)}
+.tile .tc{width:2rem;height:2rem;border-radius:.55rem;display:inline-grid;place-items:center;margin-bottom:.35rem;font-size:1rem}
+.tile b{display:block;font-size:.88rem}
+.tile small{display:block;color:var(--mute);font-size:.74rem}
+
+/* cards */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr));gap:1rem;margin-bottom:1rem;align-items:stretch}
+.grid2.wide{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+@media(max-width:1000px){.grid2.wide{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:1.1rem 1.2rem;box-shadow:var(--shadow);min-width:0}
+.head{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+h2{font-size:.98rem;margin:0;display:flex;align-items:center;gap:.5rem}
+h2 svg{color:var(--accent)}
+.hint{margin:.15rem 0 0;font-size:.8rem;color:var(--mute)}
+.link{font:inherit;font-size:.82rem;color:var(--accent);background:none;border:0;cursor:pointer;padding:0}
+.link:hover{text-decoration:underline}
+.seg{display:flex;gap:.25rem;flex-wrap:wrap}
+.seg button{font-size:.78rem;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--mute);padding:.25rem .65rem;border-radius:.5rem}
+.seg button:hover{border-color:var(--accent);color:var(--accent)}
+.seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chartbox{position:relative;height:clamp(240px,22vw,420px)}
+.empty{padding:1.5rem 0;text-align:center;color:var(--mute);font-size:.9rem}
+#status{color:var(--mute);padding:2rem 0;text-align:center}
+button.retry{margin-top:.6rem;padding:.45rem 1rem;border-radius:.6rem;border:0;background:var(--accent);color:#fff;cursor:pointer}
+
+/* last vs latest */
+.lvp{display:flex;flex-direction:column;gap:.7rem}
+.box{border-radius:.7rem;padding:.85rem 1rem;border:1px solid var(--line);background:var(--bg)}
 .box.new{background:var(--soft);border-color:var(--accent)}
-.box .t{font-size:.76rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.07em}
-.box .p{font-size:clamp(1.7rem,6vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:.15rem 0}
-.box .d{font-size:.85rem;color:var(--mute)}
-.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:90px}
-.mid .arrow{font-size:1.5rem;color:var(--mute)}
-.badge{font-weight:700;font-size:.9rem;padding:.2rem .7rem;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
-.badge.up{background:color-mix(in srgb,var(--up) 14%,transparent);border-color:var(--up)}
-.badge.down{background:color-mix(in srgb,var(--down) 14%,transparent);border-color:var(--down)}
-.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:.5rem}
-.tools input{flex:1;min-width:160px}
-.list{list-style:none;margin:0;padding:0}
-.item{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 5.4rem 4.4rem;align-items:center;gap:.75rem;padding:.72rem .5rem;border-top:1px solid var(--line);cursor:pointer;border-radius:10px}
-.item:hover,.item.sel{background:var(--soft)}
-.item .nm{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bar{height:9px;border-radius:99px;background:var(--line);overflow:hidden}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:99px}
-.item .pr{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
-.item .ch{text-align:right;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--mute)}
+.box .t{font-size:.7rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.box .p{font-size:clamp(1.5rem,2vw,2rem);font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.box .d{font-size:.8rem;color:var(--mute)}
+.mid{display:flex;align-items:center;justify-content:center;gap:.7rem;color:var(--mute);font-size:.8rem}
+.badge{font-weight:700;font-size:.85rem;padding:.2rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--card);font-variant-numeric:tabular-nums}
+.badge.up{border-color:var(--up);background:color-mix(in srgb,var(--up) 12%,transparent)}
+.badge.down{border-color:var(--down);background:color-mix(in srgb,var(--down) 12%,transparent)}
 .up{color:var(--up)!important}.down{color:var(--down)!important}
+
+/* region table */
+.list{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 6rem 5rem 7rem;align-items:center;gap:.8rem;padding:.65rem .5rem;border-top:1px solid var(--line);cursor:pointer;border-radius:.5rem;font-size:.92rem}
+.item.hd{cursor:default;border-top:0;color:var(--mute);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;font-weight:600;padding-bottom:.3rem}
+.item:not(.hd):hover,.item.sel{background:var(--soft)}
+.item .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:.5rem;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--bar));border-radius:99px}
+.item .pr{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.item .ch{text-align:right;font-size:.85rem;font-variant-numeric:tabular-nums;color:var(--mute)}
+.item .as{text-align:right;font-size:.8rem;color:var(--mute)}
 .nodata .nm{color:var(--mute)}.nodata .pr{grid-column:2/-1;font-weight:400;color:var(--mute)}
-.empty{padding:1.8rem 0;text-align:center;color:var(--mute)}
-.skeleton{color:var(--mute);padding:2rem 0;text-align:center}
-button.retry{font:inherit;margin-top:.6rem;padding:.5rem 1.1rem;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:var(--card);cursor:pointer}
-footer{max-width:var(--w);margin:0 auto;padding:.5rem 1.1rem 2.5rem;color:var(--mute);font-size:.82rem}
+footer{margin-top:1rem;color:var(--mute);font-size:.8rem}
+
+/* region dropdown */
 .dd{position:relative}
-.dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;font:inherit;text-align:left;padding:.65rem .85rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;padding:.55rem .8rem;border:1px solid var(--line);border-radius:.6rem;background:var(--card);cursor:pointer;font-size:.92rem;transition:.15s}
 .dd-btn:hover{border-color:var(--accent)}
 .dd.open .dd-btn{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
 .dd-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dd-btn svg{width:18px;height:18px;flex:none;fill:none;stroke:var(--mute);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
-.dd.open .dd-btn svg{transform:rotate(180deg);stroke:var(--accent)}
-.dd-panel{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 44px rgba(10,40,25,.2);padding:.5rem;animation:ddin .14s ease}
+.dd-btn svg{color:var(--mute);transition:transform .2s}
+.dd.open .dd-btn svg{transform:rotate(180deg);color:var(--accent)}
+.dd-panel{position:absolute;left:0;right:0;top:calc(100% + .4rem);z-index:60;min-width:16rem;background:var(--card);border:1px solid var(--line);border-radius:.8rem;box-shadow:0 18px 44px rgba(10,15,40,.22);padding:.45rem;animation:ddin .14s ease}
 @keyframes ddin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.dd-q{margin-bottom:.4rem;padding:.5rem .75rem!important;font-size:.9rem!important}
-.dd-list{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto;scrollbar-width:thin}
-.dd-list li{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.5rem .7rem;border-radius:9px;cursor:pointer;font-size:.92rem}
+.dd-q{width:100%;font:inherit;font-size:.88rem;padding:.5rem .7rem;border:1px solid var(--line);border-radius:.55rem;background:var(--bg);color:var(--ink);margin-bottom:.35rem}
+.dd-q:focus{outline:2px solid var(--accent);outline-offset:1px}
+.dd-list{list-style:none;margin:0;padding:0;max-height:16rem;overflow:auto;scrollbar-width:thin}
+.dd-list li{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.5rem .65rem;border-radius:.5rem;cursor:pointer;font-size:.9rem}
 .dd-list li:hover,.dd-list li:focus{background:var(--soft);outline:0}
 .dd-list li.sel{color:var(--accent);font-weight:600}
 .dd-list li.sel::after{content:"\2713"}
 .dd-list li.dd-empty{color:var(--mute);justify-content:center;cursor:default;background:none}
-section[id],header[id]{scroll-margin-top:72px}
-/* top nav: slides up when scrolling down, back down when scrolling up */
-.topnav{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:transform .32s ease}
-.topnav.hide{transform:translateY(-100%)}
-.topnav .in{max-width:var(--w);height:100%;margin:0 auto;padding:0 1.1rem;display:flex;align-items:center;gap:1rem}
-.brand{font-weight:800;letter-spacing:-.02em;white-space:nowrap;color:var(--ink);text-decoration:none}
-.brand span{color:var(--accent)}
-.toplinks{display:flex;gap:.2rem;margin-left:auto;overflow-x:auto;scrollbar-width:none}
-.toplinks::-webkit-scrollbar{display:none}
-.toplinks a{color:var(--mute);text-decoration:none;font-size:.88rem;padding:.35rem .8rem;border-radius:999px;white-space:nowrap;transition:.15s}
-.toplinks a:hover{color:var(--ink);background:var(--soft)}
-.toplinks a.on{background:var(--soft);color:var(--accent);font-weight:600}
-/* left side nav: always stays in place */
-@property --s{syntax:"<length>";inherits:false;initial-value:78px}
-.sidenav{--s:78px;position:fixed;left:16px;top:max(var(--y,0px),var(--s));transition:--s .32s ease;z-index:40;width:11.2rem;padding:.7rem;display:flex;flex-direction:column;gap:.15rem;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
-.topnav.hide~.sidenav{--s:20px}
-.sidenav .ttl{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:.2rem .75rem .5rem}
-.sidenav a{position:relative;display:flex;align-items:center;gap:.7rem;padding:.55rem .75rem;border-radius:13px;color:var(--mute);text-decoration:none;font-size:.9rem;font-weight:500;transition:background .18s,color .18s}
-.sidenav a svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.sidenav a:hover{background:var(--soft);color:var(--ink)}
-.sidenav a.on{background:var(--soft);color:var(--accent);font-weight:700}
-.sidenav a.on::before{content:"";position:absolute;left:0;top:24%;bottom:24%;width:3px;border-radius:3px;background:var(--accent)}
-.sidenav .track{height:4px;border-radius:99px;background:var(--line);margin:.6rem .6rem .15rem;overflow:hidden}
-.sidenav .track i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .12s}
-@media(min-width:1200px){
- :root{--w:min(2400px,calc(100vw - 11.2rem - 66px))}
- .hero .wrap,main,footer,.topnav .in{margin-left:max(calc(11.2rem + 36px),calc((100vw - var(--w))/2));margin-right:auto}
-}
-@media(min-width:761px) and (max-width:1199px){
- .sidenav{width:52px;padding:.5rem;align-items:center;border-radius:18px;left:10px}
- .sidenav .ttl,.sidenav .track{display:none}
- .sidenav a{padding:.6rem;justify-content:center}
- .sidenav a span{position:absolute;left:calc(100% + 12px);opacity:0;transform:translateX(-6px);pointer-events:none;white-space:nowrap;background:var(--card);border:1px solid var(--line);padding:.25rem .7rem;border-radius:999px;color:var(--ink);font-size:.82rem;font-weight:500;box-shadow:var(--shadow);transition:.18s}
- .sidenav a:hover span{opacity:1;transform:none}
- .hero,main,footer{padding-left:calc(1.1rem + 64px)}
-}
-@media(max-width:760px){.sidenav{display:none}.brand{font-size:.95rem}.topnav .in{gap:.5rem}}
-@media(max-width:600px){
- .hero{padding-top:4.8rem;border-radius:0 0 24px 24px}
- .lvp{grid-template-columns:1fr}
- .mid{flex-direction:row;gap:.6rem;min-width:0}.mid .arrow{transform:rotate(90deg)}
- .item{grid-template-columns:minmax(0,1fr) 5rem 4rem}.item .bar{display:none}
- .chartbox{height:230px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* small screens: sidebar becomes a slide-in drawer */
+@media(max-width:900px){
+ .main{margin-left:0}
+ .side{transform:translateX(-100%);box-shadow:none}
+ body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.3)}
+ body.collapsed .side{transform:translateX(-100%)}
+ body.nav-open.collapsed .side{transform:none}
+ .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:65;opacity:0;pointer-events:none;transition:opacity .2s}
+ body.nav-open .scrim{opacity:1;pointer-events:auto}
+ .upd{display:none}
+ .page{padding:1rem}
+ .top{padding:0 .8rem}
+ .item{grid-template-columns:minmax(0,1fr) 5.2rem 4rem}
+ .item .bar,.item .as{display:none}
+ .item.hd .bar,.item.hd .as{display:none}
+ .nodata .pr{grid-column:2/-1}
 }
 </style></head><body>
-<nav class="topnav" id="topnav" aria-label="Main">
- <div class="in">
-  <a class="brand" href="#top">&#127806; Presyo ng <span>Bigas</span></a>
-  <div class="toplinks">
-   <a href="#top" data-nav="top" class="on">Overview</a>
-   <a href="#latest" data-nav="latest">Latest</a>
-   <a href="#trend" data-nav="trend">Trend</a>
-   <a href="#compare" data-nav="compare">Compare</a>
-   <a href="#movers" data-nav="movers">Movers</a>
-   <a href="#regions" data-nav="regions">Regions</a>
-  </div>
- </div>
-</nav>
-<nav class="sidenav" aria-label="Sections">
- <div class="ttl">On this page</div>
- <a href="#top" data-nav="top" class="on" title="Overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Overview</span></a>
- <a href="#latest" data-nav="latest" title="Latest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg><span>Latest</span></a>
- <a href="#trend" data-nav="trend" title="Trend"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg><span>Trend</span></a>
- <a href="#compare" data-nav="compare" title="Compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V10M12 21V4M19 21v-8"/></svg><span>Compare</span></a>
- <a href="#movers" data-nav="movers" title="Movers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg><span>Movers</span></a>
- <a href="#regions" data-nav="regions" title="Regions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Regions</span></a>
- <div class="track"><i id="prog"></i></div>
-</nav>
-<header class="hero" id="top"><div class="wrap">
- <span class="eyebrow">Philippines &middot; Rice price tracker</span>
- <h1>Presyo ng <span>Bigas</span></h1>
- <p>See what rice costs per kilo in every region, how prices moved since the last update, and where they are heading.</p>
- <span class="updated" id="updated" hidden></span>
-</div></header>
 
-<main>
-<section class="card" id="controls" hidden>
- <span class="label">Rice variety</span>
- <div class="chips" id="chips"></div>
- <div class="row"><div class="field"><span class="label" id="regionLbl">Region</span>
-  <div class="dd" id="dd">
-   <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="regionLbl ddVal"><span id="ddVal">All regions (average)</span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
-   <div class="dd-panel" id="ddPanel" hidden>
-    <input type="search" class="dd-q" id="ddQ" placeholder="Search a region..." aria-label="Search regions">
-    <ul class="dd-list" id="ddList" role="listbox" aria-label="Regions"></ul>
+<aside class="side" id="side" aria-label="Sidebar">
+ <a class="brand" href="#top"><span class="logo">&#127806;</span><span><b>Presyo ng Bigas</b><small>Philippine rice prices</small></span></a>
+ <div class="sec"><h6>Dashboard</h6>
+  <nav class="nav" aria-label="Sections">
+   <a href="#top" data-nav="top" class="on"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Overview</a>
+   <a href="#trend" data-nav="trend"><svg class="i" viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>Trend</a>
+   <a href="#latest" data-nav="latest"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg>Last vs latest</a>
+   <a href="#compare" data-nav="compare"><svg class="i" viewBox="0 0 24 24"><path d="M5 21V10M12 21V4M19 21v-8"/></svg>Compare</a>
+   <a href="#movers" data-nav="movers"><svg class="i" viewBox="0 0 24 24"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg>Movers</a>
+   <a href="#regions" data-nav="regions"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Regions</a>
+  </nav></div>
+ <div class="sidefoot">Prices in PHP per kilogram.</div>
+</aside>
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+ <header class="top">
+  <button class="ib" id="menu" aria-label="Toggle menu"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+  <label class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="gq" type="search" placeholder="Search a region..." aria-label="Search regions"><kbd>Ctrl K</kbd></label>
+  <span class="sp"></span>
+  <span class="upd" id="updated" hidden></span>
+  <button class="ib" id="theme" aria-label="Toggle dark mode"><svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+ </header>
+
+ <main class="page">
+  <section id="top">
+   <div class="crumb"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg> &rsaquo; <span>Dashboard</span></div>
+   <div class="titlebar">
+    <div><h1>Dashboard</h1><p>Welcome! Here is what rice costs per kilo across the Philippines.</p></div>
+    <div class="field"><span class="lbl" id="regionLbl">Region</span>
+     <div class="dd" id="dd">
+      <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="regionLbl ddVal"><span id="ddVal">All regions (average)</span><svg class="i" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="dd-panel" id="ddPanel" hidden>
+       <input type="search" class="dd-q" id="ddQ" placeholder="Search a region..." aria-label="Search regions">
+       <ul class="dd-list" id="ddList" role="listbox" aria-label="Regions"></ul>
+      </div>
+     </div>
+    </div>
    </div>
-  </div>
- </div></div>
-</section>
+  </section>
 
-<div id="status" class="skeleton" role="status">Loading prices...</div>
+  <div id="status" role="status">Loading prices...</div>
 
-<div id="content" hidden>
- <section class="stats">
-  <div class="stat" style="--c:var(--accent)"><div class="ic">&#127806;</div><div class="k">National average</div><div class="v" id="s1">-</div><div class="s" id="s1s"></div></div>
-  <div class="stat" style="--c:#2f9e6b"><div class="ic">&#128201;</div><div class="k">Lowest region</div><div class="v" id="s2">-</div><div class="s" id="s2s"></div></div>
-  <div class="stat" style="--c:#d9822b"><div class="ic">&#128200;</div><div class="k">Highest region</div><div class="v" id="s3">-</div><div class="s" id="s3s"></div></div>
-  <div class="stat" style="--c:#d9a521"><div class="ic">&#128197;</div><div class="k">Coverage</div><div class="v" id="s4">-</div><div class="s" id="s4s"></div></div>
- </section>
-
- <section class="card" id="latest">
-  <div class="head"><div><h2>Last update vs latest update</h2><p class="hint" id="lvpHint"></p></div></div>
-  <div id="lvp"></div>
- </section>
-
- <section class="card" id="trend">
-  <div class="head">
-   <div><h2 id="ctitle">Price trend</h2><button class="clear" id="clear" hidden>Show all regions</button><p class="hint">How the price per kilo changed over time.</p></div>
-   <div class="seg" id="ranges" role="group" aria-label="Time range">
-    <button data-r="1m" aria-pressed="false">1M</button><button data-r="3m" aria-pressed="false">3M</button><button data-r="6m" aria-pressed="false">6M</button><button data-r="all" aria-pressed="true">All</button>
+  <div id="content" hidden>
+   <div class="kpis">
+    <div class="kpi k1"><span class="ico"><svg class="i" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div class="k">National average</div><div class="v" id="s1">-</div><div class="s" id="s1s"></div></div>
+    <div class="kpi k2"><span class="ico"><svg class="i" viewBox="0 0 24 24"><polyline points="3 7 9 13 13 9 21 17"/><polyline points="14 17 21 17 21 10"/></svg></span><div class="k">Lowest region</div><div class="v" id="s2">-</div><div class="s" id="s2s"></div></div>
+    <div class="kpi k3"><span class="ico"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div class="k">Coverage</div><div class="v" id="s4">-</div><div class="s" id="s4s"></div></div>
+    <div class="kpi k4"><span class="ico"><svg class="i" viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg></span><div class="k">Highest region</div><div class="v" id="s3">-</div><div class="s" id="s3s"></div></div>
    </div>
-  </div>
-  <div class="chartbox" id="trendBox"><canvas id="chart"></canvas></div>
-  <p class="empty" id="noChart" hidden>No price data for this selection yet.</p>
- </section>
 
- <section class="card" id="compare">
-  <div class="head"><div><h2>Previous vs latest, by region</h2><p class="hint">Grey is the last update, green is the latest. Tap a bar to open that region.</p></div></div>
-  <div class="chartbox" id="cmpBox"><canvas id="cmp"></canvas></div>
-  <p class="empty" id="noCmp" hidden>No regional data yet.</p>
- </section>
+   <div class="tiles" id="tiles" role="group" aria-label="Rice variety"></div>
 
- <section class="card" id="movers">
-  <div class="head"><div><h2>Who moved the most</h2><p class="hint">Change in price per kilo since each region's previous update. Orange went up, green went down.</p></div></div>
-  <div class="chartbox" id="chgBox"><canvas id="chg"></canvas></div>
-  <p class="empty" id="noChg" hidden>Each region needs at least two updates to show a change.</p>
- </section>
-
- <section class="card" id="regions">
-  <div class="head"><div><h2>Prices by region</h2><p class="hint">Latest price in every region.</p></div>
-   <div class="seg" id="sorts" role="group" aria-label="Sort">
-    <button data-s="name" aria-pressed="true">A to Z</button><button data-s="low" aria-pressed="false">Lowest first</button><button data-s="high" aria-pressed="false">Highest first</button>
+   <div class="grid2 wide">
+    <section class="card" id="trend">
+     <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg><span id="ctitle">Price trend</span></h2><button class="link" id="clear" hidden>Show all regions</button></div>
+      <div class="seg" id="ranges" role="group" aria-label="Time range"><button data-r="1m" aria-pressed="false">1M</button><button data-r="3m" aria-pressed="false">3M</button><button data-r="6m" aria-pressed="false">6M</button><button data-r="all" aria-pressed="true">All</button></div></div>
+     <div class="chartbox" id="trendBox"><canvas id="chart"></canvas></div>
+     <p class="empty" id="noChart" hidden>No price data for this selection yet.</p>
+    </section>
+    <section class="card" id="latest">
+     <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg>Last vs latest update</h2><p class="hint" id="lvpHint"></p></div></div>
+     <div id="lvp"></div>
+    </section>
    </div>
+
+   <div class="grid2">
+    <section class="card" id="compare">
+     <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><path d="M5 21V10M12 21V4M19 21v-8"/></svg>Previous vs latest, by region</h2><p class="hint">Grey is the last update, purple is the latest. Click a bar to open that region.</p></div></div>
+     <div class="chartbox" id="cmpBox"><canvas id="cmp"></canvas></div>
+     <p class="empty" id="noCmp" hidden>No regional data yet.</p>
+    </section>
+    <section class="card" id="movers">
+     <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg>Who moved the most</h2><p class="hint">Change since each region's previous update. Orange went up, green went down.</p></div></div>
+     <div class="chartbox" id="chgBox"><canvas id="chg"></canvas></div>
+     <p class="empty" id="noChg" hidden>Each region needs at least two updates to show a change.</p>
+    </section>
+   </div>
+
+   <section class="card" id="regions">
+    <div class="head"><div><h2><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Prices by region</h2><p class="hint">Latest price in every region.</p></div>
+     <div class="seg" id="sorts" role="group" aria-label="Sort"><button data-s="name" aria-pressed="true">A to Z</button><button data-s="low" aria-pressed="false">Lowest first</button><button data-s="high" aria-pressed="false">Highest first</button></div></div>
+    <ul class="list" id="list"></ul>
+   </section>
   </div>
-  <div class="tools"><input type="search" id="q" placeholder="Search a region..." aria-label="Search regions"></div>
-  <ul class="list" id="list"></ul>
- </section>
+  <footer>Prices are in Philippine pesos (PHP) per kilogram. "Latest" is the newest entry for a region and "previous" is the entry before it.</footer>
+ </main>
 </div>
-</main>
-<footer>Prices are in Philippine pesos (PHP) per kilogram. "Latest" is the newest entry for a region and "previous" is the entry before it. The source of each entry is recorded by the site admin.</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -233,24 +254,39 @@ section[id],header[id]{scroll-margin-top:72px}
 <script>
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),$=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const peso=n=>'\u20B1'+Number(n).toFixed(2);
+const peso=n=>'₱'+Number(n).toFixed(2);
 const delta=d=>d===null||d===undefined?'-':(d>0?'+':'')+d.toFixed(2);
 const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
 const hexA=(h,a)=>{const n=parseInt(h.replace('#',''),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 const DAYS={'1m':30,'3m':90,'6m':180};
+const TILE=['#6366f1','#10b981','#06b6d4','#f97316','#ec4899','#eab308'];
 let regions=[],varieties=[],prices=[],charts={};
-Chart.defaults.font.size=Math.round(parseFloat(getComputedStyle(document.documentElement).fontSize)*.8);Chart.defaults.font.family=getComputedStyle(document.body).fontFamily;
 const state={v:0,r:0,range:'all',sort:'name',q:''};
 
+// ---------- layout: sidebar, theme, search ----------
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const savedTheme=store.get('theme');if(savedTheme)document.documentElement.setAttribute('data-theme',savedTheme);
+$('menu').onclick=()=>{if(matchMedia('(max-width:900px)').matches)document.body.classList.toggle('nav-open');else document.body.classList.toggle('collapsed')};
+$('scrim').onclick=()=>document.body.classList.remove('nav-open');
+document.querySelectorAll('.side a[href^="#"]').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('nav-open')));
+$('theme').onclick=()=>{const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+ const nx=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',nx);store.set('theme',nx);if(prices.length)render()};
+$('gq').oninput=e=>{state.q=e.target.value.trim().toLowerCase();if(prices.length)renderList()};
+$('gq').onkeydown=e=>{if(e.key==='Enter')$('regions').scrollIntoView({behavior:'smooth'})};
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('gq').focus();$('gq').select()}});
+const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===e.target.id))}),{rootMargin:'-20% 0px -65% 0px'});
+['top','trend','latest','compare','movers','regions'].forEach(id=>{const el=$(id);el&&spy.observe(el)});
+
+// ---------- data ----------
 async function all(table,cols,order){let out=[],f=0;for(;;){const{data,error}=await sb.from(table).select(cols).order(order).order('id').range(f,f+999);if(error)throw error;out.push(...data);if(data.length<1000)return out;f+=1000}}
 
 async function init(){
- $('status').hidden=false;$('status').className='skeleton';$('status').textContent='Loading prices...';
+ $('status').hidden=false;$('status').textContent='Loading prices...';
  try{[regions,varieties,prices]=await Promise.all([all('regions','*','sort_order'),all('varieties','*','name'),all('prices','*','date')])}
  catch(e){$('status').innerHTML='Could not load prices. Please check your connection and try again.<br><button class="retry" id="retry">Try again</button>';$('retry').onclick=init;return}
- if(!prices.length||!varieties.length){$('status').className='empty';$('status').textContent='No prices have been published yet. Please check back soon.';return}
- $('status').hidden=true;$('controls').hidden=false;$('content').hidden=false;
- const last=prices.reduce((m,p)=>p.date>m?p.date:m,'');$('updated').textContent='Last updated '+fmt(last);$('updated').hidden=false;
+ if(!prices.length||!varieties.length){$('status').textContent='No prices have been published yet. Please check back soon.';return}
+ $('status').hidden=true;$('content').hidden=false;
+ const last=prices.reduce((m,p)=>p.date>m?p.date:m,'');$('updated').textContent='Updated '+fmt(last);$('updated').hidden=false;
  const counts={};prices.forEach(p=>counts[p.variety_id]=(counts[p.variety_id]||0)+1);
  state.v=+Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0]||varieties[0].id;
  buildDD();syncDD();
@@ -264,94 +300,12 @@ async function init(){
   if(e.key==='ArrowDown'){e.preventDefault();li.nextElementSibling&&li.nextElementSibling.focus()}
   else if(e.key==='ArrowUp'){e.preventDefault();(li.previousElementSibling||$('ddQ')).focus()}
   else if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseRegion(+li.dataset.id)}};
- $('q').oninput=e=>{state.q=e.target.value.trim().toLowerCase();renderList()};
  $('clear').onclick=()=>pickRegion(0);
  $('ranges').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.range=b.dataset.r;render()};
  $('sorts').onclick=e=>{const b=e.target.closest('button');if(!b)return;state.sort=b.dataset.s;render()};
  render()}
 
-function pickRegion(id){state.r=id;syncDD();render();if(id)$('trend').scrollIntoView({behavior:'smooth',block:'nearest'})}
-
-function rowsFor(vp){return regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id),a=s[s.length-1],b=s[s.length-2];return{rg,a,b,d:a&&b?a.price_per_kg-b.price_per_kg:null}})}
-function series(vp,r){const src=r?vp.filter(p=>p.region_id===r):vp,by={};src.forEach(p=>(by[p.date]??=[]).push(+p.price_per_kg));const labels=Object.keys(by).sort();return{labels,data:labels.map(d=>by[d].reduce((a,b)=>a+b,0)/by[d].length)}}
-function colors(){const c=getComputedStyle(document.documentElement),g=k=>c.getPropertyValue(k).trim();return{accent:g('--accent'),line:g('--line'),mute:g('--mute'),prev:g('--prev'),up:g('--up'),down:g('--down')}}
-function setBox(id,show,h){const b=$(id+'Box');b.hidden=!show;if(h)b.style.height=h+'px'}
-function kill(k){charts[k]&&charts[k].destroy();delete charts[k]}
-const trunc=function(v){const t=this.getLabelForValue(v);return t.length>24?t.slice(0,23)+'\u2026':t};
-
-function render(){
- const vp=prices.filter(p=>p.variety_id===state.v),rows=rowsFor(vp),have=rows.filter(x=>x.a);
- $('chips').innerHTML=varieties.map(v=>`<button class="chip" data-v="${v.id}" aria-pressed="${v.id===state.v}">${esc(v.name)}</button>`).join('');
- $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.v=+b.dataset.v;render()});
- $('ranges').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===state.range));
- $('sorts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===state.sort));
- renderStats(vp,have);renderLvp(vp);renderTrend(vp);renderCompare(have);renderChange(have);renderList(rows)}
-
-function renderStats(vp,have){
- if(!have.length){['s1','s2','s3','s4'].forEach(k=>{$(k).textContent='-';$(k+'s').textContent='No data yet'});return}
- const avg=have.reduce((s,x)=>s+ +x.a.price_per_kg,0)/have.length;
- const lo=have.reduce((m,x)=>+x.a.price_per_kg<+m.a.price_per_kg?x:m),hi=have.reduce((m,x)=>+x.a.price_per_kg>+m.a.price_per_kg?x:m);
- const s=series(vp,0),n=s.data.length,d=n>1?s.data[n-1]-s.data[n-2]:null;
- $('s1').textContent=peso(avg);
- $('s1s').innerHTML=d===null?'per kg':`<span class="${d>0?'up':d<0?'down':''}">${d>0?'\u25B2':d<0?'\u25BC':'='} ${delta(d)}</span> since last update`;
- $('s2').textContent=peso(lo.a.price_per_kg);$('s2s').textContent=lo.rg.name;
- $('s3').textContent=peso(hi.a.price_per_kg);$('s3s').textContent=hi.rg.name;
- $('s4').textContent=`${have.length}/${regions.length}`;$('s4s').textContent=`regions with prices \u00B7 ${vp.length} entries`}
-
-function renderLvp(vp){
- const s=series(vp,state.r),n=s.labels.length,rn=state.r?regions.find(x=>x.id===state.r).name:'All regions (average)';
- $('lvpHint').textContent=rn;
- if(!n){$('lvp').innerHTML='<p class="empty">No data for this selection yet.</p>';return}
- const L=s.data[n-1],ld=s.labels[n-1];
- if(n<2){$('lvp').innerHTML=`<div class="lvp" style="grid-template-columns:1fr"><div class="box new"><div class="t">Latest update</div><div class="p">${peso(L)}</div><div class="d">${fmt(ld)} &middot; only one update so far</div></div></div>`;return}
- const P=s.data[n-2],pd=s.labels[n-2],d=L-P,pct=d/P*100,cls=d>0?'up':d<0?'down':'';
- $('lvp').innerHTML=`<div class="lvp"><div class="box"><div class="t">Last update</div><div class="p">${peso(P)}</div><div class="d">${fmt(pd)}</div></div>
- <div class="mid"><span class="arrow">&rarr;</span><span class="badge ${cls}">${d>0?'\u25B2':d<0?'\u25BC':'='} ${delta(d)}</span><span class="d" style="font-size:.8rem;color:var(--mute)">${pct>0?'+':''}${pct.toFixed(1)}%</span></div>
- <div class="box new"><div class="t">Latest update</div><div class="p">${peso(L)}</div><div class="d">${fmt(ld)}</div></div></div>`}
-
-function renderTrend(vp){
- const r=state.r,s=series(vp,r);let{labels,data}=s;
- if(state.range!=='all'&&labels.length){const end=new Date(labels[labels.length-1]+'T00:00:00');end.setDate(end.getDate()-DAYS[state.range]);const cut=end.toISOString().slice(0,10),keep=labels.map(d=>d>=cut);data=data.filter((_,i)=>keep[i]);labels=labels.filter((_,i)=>keep[i])}
- const vn=varieties.find(x=>x.id===state.v)?.name||'',rn=r?regions.find(x=>x.id===r).name:'All regions (average)';
- $('ctitle').textContent=`${vn} \u00B7 ${rn}`;$('clear').hidden=!r;
- kill('trend');$('noChart').hidden=labels.length>0;setBox('trend',labels.length);if(!labels.length)return;
- const c=colors();
- charts.trend=new Chart($('chart'),{type:'line',data:{labels:labels.map(fmt),datasets:[{data,borderColor:c.accent,backgroundColor:hexA(c.accent,.14),fill:true,borderWidth:3,tension:.3,pointRadius:labels.length>40?0:4,pointHoverRadius:6,pointBackgroundColor:c.accent}]},
-  options:{maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
-   plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>' '+peso(x.parsed.y)+' per kg'}}},
-   scales:{x:{grid:{display:false},ticks:{color:c.mute,maxTicksLimit:5,maxRotation:0}},y:{grid:{color:c.line},ticks:{color:c.mute,callback:v=>'\u20B1'+v}}}}})}
-
-function renderCompare(have){
- kill('cmp');$('noCmp').hidden=have.length>0;setBox('cmp',have.length,have.length*38+70);if(!have.length)return;
- const c=colors();
- charts.cmp=new Chart($('cmp'),{type:'bar',data:{labels:have.map(x=>x.rg.name),datasets:[
-  {label:'Last update',data:have.map(x=>x.b?+x.b.price_per_kg:null),backgroundColor:c.prev,borderRadius:5},
-  {label:'Latest update',data:have.map(x=>+x.a.price_per_kg),backgroundColor:c.accent,borderRadius:5}]},
-  options:{indexAxis:'y',maintainAspectRatio:false,onClick:(e,els)=>{if(els.length)pickRegion(have[els[0].index].rg.id)},
-   plugins:{legend:{position:'bottom',labels:{color:c.mute,usePointStyle:true,boxWidth:8}},tooltip:{callbacks:{label:x=>` ${x.dataset.label}: ${peso(x.parsed.x)}`,afterLabel:x=>{const r=have[x.dataIndex];const p=x.datasetIndex?r.a:r.b;return p?fmt(p.date):''}}}},
-   scales:{x:{grid:{color:c.line},ticks:{color:c.mute,callback:v=>'\u20B1'+v}},y:{grid:{display:false},ticks:{color:c.mute,callback:trunc}}}}})}
-
-function renderChange(have){
- const list=have.filter(x=>x.d!==null).sort((a,b)=>b.d-a.d);
- kill('chg');$('noChg').hidden=list.length>0;setBox('chg',list.length,list.length*34+50);if(!list.length)return;
- const c=colors();
- charts.chg=new Chart($('chg'),{type:'bar',data:{labels:list.map(x=>x.rg.name),datasets:[{data:list.map(x=>+x.d.toFixed(2)),backgroundColor:list.map(x=>x.d>0?c.up:c.down),borderRadius:5}]},
-  options:{indexAxis:'y',maintainAspectRatio:false,onClick:(e,els)=>{if(els.length)pickRegion(list[els[0].index].rg.id)},
-   plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>' '+delta(x.parsed.x)+' per kg'}}},
-   scales:{x:{grid:{color:c.line},ticks:{color:c.mute,callback:v=>(v>0?'+':'')+v}},y:{grid:{display:false},ticks:{color:c.mute,callback:trunc}}}}})}
-
-function renderList(rows){
- rows=rows||rowsFor(prices.filter(p=>p.variety_id===state.v));
- let list=rows.filter(x=>x.rg.name.toLowerCase().includes(state.q));
- if(state.sort!=='name'){const dir=state.sort==='low'?1:-1;list=[...list].sort((a,b)=>!a.a?1:!b.a?-1:dir*(a.a.price_per_kg-b.a.price_per_kg))}
- const max=Math.max(...rows.filter(x=>x.a).map(x=>+x.a.price_per_kg),1);
- $('list').innerHTML=list.length?list.map(x=>{
-  if(!x.a)return`<li class="item nodata" data-r="${x.rg.id}"><span class="nm">${esc(x.rg.name)}</span><span class="pr">No data yet</span></li>`;
-  const w=Math.max(4,+x.a.price_per_kg/max*100);
-  return`<li class="item ${x.rg.id===state.r?'sel':''}" data-r="${x.rg.id}" tabindex="0" title="As of ${fmt(x.a.date)}"><span class="nm">${esc(x.rg.name)}</span><span class="bar"><i style="width:${w}%"></i></span><span class="pr">${peso(x.a.price_per_kg)}</span><span class="ch ${x.d>0?'up':x.d<0?'down':''}">${delta(x.d)}</span></li>`}).join(''):'<li class="empty">No regions match your search.</li>';
- $('list').querySelectorAll('.item').forEach(li=>{const go=()=>pickRegion(+li.dataset.r);li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
-
-// custom region dropdown
+// ---------- region dropdown ----------
 function buildDD(){
  const q=$('ddQ').value.trim().toLowerCase(),opts=[{id:0,name:'All regions (average)'},...regions].filter(o=>o.name.toLowerCase().includes(q));
  $('ddList').innerHTML=opts.length?opts.map(o=>`<li role="option" tabindex="-1" data-id="${o.id}" aria-selected="${o.id===state.r}" class="${o.id===state.r?'sel':''}">${esc(o.name)}</li>`).join(''):'<li class="dd-empty">No regions match</li>'}
@@ -362,29 +316,95 @@ function openDD(open){
 function chooseRegion(id){state.r=id;syncDD();openDD(false);$('ddBtn').focus();render()}
 document.addEventListener('click',e=>{if(!$('dd').contains(e.target))openDD(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('ddPanel').hidden){openDD(false);$('ddBtn').focus()}});
+function pickRegion(id){state.r=id;syncDD();render();if(id)$('trend').scrollIntoView({behavior:'smooth',block:'nearest'})}
 
-// top nav: hide when scrolling down, show when scrolling up (side nav never moves)
-const topnav=$('topnav');let lastY=scrollY,tick=false;
-addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{
- const y=scrollY,d=y-lastY;
- if(y<60){topnav.classList.remove('hide');lastY=y}
- else if(Math.abs(d)>6){topnav.classList.toggle('hide',d>0);lastY=y}
- tick=false})},{passive:true});
-topnav.addEventListener('focusin',()=>topnav.classList.remove('hide'));
-// side nav starts below the green banner, then rises with the page and sticks to the top
-const sidenav=document.querySelector('.sidenav'),heroEl=$('top');
-function placeSide(){sidenav.style.setProperty('--y',Math.max(0,Math.round(heroEl.getBoundingClientRect().bottom+16))+'px')}
-addEventListener('scroll',placeSide,{passive:true});addEventListener('resize',placeSide);
-new ResizeObserver(placeSide).observe(heroEl);placeSide();
-// reading progress bar inside the side nav
-const prog=$('prog');
-function setProg(){const h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?Math.min(100,scrollY/h*100):0)+'%'}
-addEventListener('scroll',setProg,{passive:true});addEventListener('resize',setProg);setProg();
-// highlight the section currently in view in both navs
-const navLinks=document.querySelectorAll('[data-nav]');
-function setActive(id){navLinks.forEach(a=>{const on=a.dataset.nav===id;a.classList.toggle('on',on);on?a.setAttribute('aria-current','true'):a.removeAttribute('aria-current')})}
-const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setActive(e.target.id)}),{rootMargin:'-35% 0px -60% 0px'});
-['top','latest','trend','compare','movers','regions'].forEach(id=>{const el=$(id);el&&spy.observe(el)});
+// ---------- helpers ----------
+function rowsFor(vp){return regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id),a=s[s.length-1],b=s[s.length-2];return{rg,a,b,d:a&&b?a.price_per_kg-b.price_per_kg:null}})}
+function series(vp,r){const src=r?vp.filter(p=>p.region_id===r):vp,by={};src.forEach(p=>(by[p.date]??=[]).push(+p.price_per_kg));const labels=Object.keys(by).sort();return{labels,data:labels.map(d=>by[d].reduce((a,b)=>a+b,0)/by[d].length)}}
+function colors(){const c=getComputedStyle(document.documentElement),g=k=>c.getPropertyValue(k).trim();return{accent:g('--accent'),bar:g('--bar'),line:g('--line'),mute:g('--mute'),prev:g('--prev'),up:g('--up'),down:g('--down')}}
+function setBox(id,show,h){const b=$(id+'Box');b.hidden=!show;if(h)b.style.height=h+'px'}
+function kill(k){charts[k]&&charts[k].destroy();delete charts[k]}
+const trunc=function(v){const t=this.getLabelForValue(v);return t.length>26?t.slice(0,25)+'…':t};
+
+// ---------- render ----------
+function render(){
+ const vp=prices.filter(p=>p.variety_id===state.v),rows=rowsFor(vp),have=rows.filter(x=>x.a);
+ const rs=getComputedStyle(document.documentElement);Chart.defaults.font.size=Math.round(parseFloat(rs.fontSize)*.8);Chart.defaults.font.family=getComputedStyle(document.body).fontFamily;
+ $('ranges').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===state.range));
+ $('sorts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===state.sort));
+ renderTiles();renderStats(vp,have);renderLvp(vp);renderTrend(vp);renderCompare(have);renderChange(have);renderList(rows)}
+
+function renderTiles(){
+ $('tiles').innerHTML=varieties.map((v,i)=>{
+  const vp=prices.filter(p=>p.variety_id===v.id),latest=regions.map(rg=>{const s=vp.filter(p=>p.region_id===rg.id);return s[s.length-1]}).filter(Boolean);
+  const avg=latest.length?latest.reduce((a,x)=>a+ +x.price_per_kg,0)/latest.length:null,c=TILE[i%TILE.length];
+  return`<button type="button" class="tile" data-v="${v.id}" aria-pressed="${v.id===state.v}"><span class="tc" style="background:${hexA(c,.14)};color:${c}">&#127806;</span><b>${esc(v.name)}</b><small>${avg===null?'No data yet':peso(avg)+' avg per kg'}</small></button>`}).join('');
+ $('tiles').querySelectorAll('.tile').forEach(b=>b.onclick=()=>{state.v=+b.dataset.v;render()})}
+
+function renderStats(vp,have){
+ if(!have.length){['s1','s2','s3','s4'].forEach(k=>{$(k).textContent='-';$(k+'s').textContent='No data yet'});return}
+ const avg=have.reduce((s,x)=>s+ +x.a.price_per_kg,0)/have.length;
+ const lo=have.reduce((m,x)=>+x.a.price_per_kg<+m.a.price_per_kg?x:m),hi=have.reduce((m,x)=>+x.a.price_per_kg>+m.a.price_per_kg?x:m);
+ const s=series(vp,0),n=s.data.length,d=n>1?s.data[n-1]-s.data[n-2]:null;
+ $('s1').textContent=peso(avg);
+ $('s1s').textContent=d===null?'per kg':`${d>0?'▲':d<0?'▼':'='} ${delta(d)} vs last update`;
+ $('s2').textContent=peso(lo.a.price_per_kg);$('s2s').textContent=lo.rg.name;
+ $('s3').textContent=peso(hi.a.price_per_kg);$('s3s').textContent=hi.rg.name;
+ $('s4').textContent=`${have.length}/${regions.length}`;$('s4s').textContent=`regions with prices · ${vp.length} entries`}
+
+function renderLvp(vp){
+ const s=series(vp,state.r),n=s.labels.length,rn=state.r?regions.find(x=>x.id===state.r).name:'All regions (average)';
+ $('lvpHint').textContent=rn;
+ if(!n){$('lvp').innerHTML='<p class="empty">No data for this selection yet.</p>';return}
+ const L=s.data[n-1],ld=s.labels[n-1];
+ if(n<2){$('lvp').innerHTML=`<div class="lvp"><div class="box new"><div class="t">Latest update</div><div class="p">${peso(L)}</div><div class="d">${fmt(ld)} &middot; only one update so far</div></div></div>`;return}
+ const P=s.data[n-2],pd=s.labels[n-2],d=L-P,pct=d/P*100,cls=d>0?'up':d<0?'down':'';
+ $('lvp').innerHTML=`<div class="lvp"><div class="box"><div class="t">Last update</div><div class="p">${peso(P)}</div><div class="d">${fmt(pd)}</div></div>
+ <div class="mid"><span class="badge ${cls}">${d>0?'▲':d<0?'▼':'='} ${delta(d)}</span><span>${pct>0?'+':''}${pct.toFixed(1)}%</span></div>
+ <div class="box new"><div class="t">Latest update</div><div class="p">${peso(L)}</div><div class="d">${fmt(ld)}</div></div></div>`}
+
+function renderTrend(vp){
+ const r=state.r,s=series(vp,r);let{labels,data}=s;
+ if(state.range!=='all'&&labels.length){const end=new Date(labels[labels.length-1]+'T00:00:00');end.setDate(end.getDate()-DAYS[state.range]);const cut=end.toISOString().slice(0,10),keep=labels.map(d=>d>=cut);data=data.filter((_,i)=>keep[i]);labels=labels.filter((_,i)=>keep[i])}
+ const vn=varieties.find(x=>x.id===state.v)?.name||'',rn=r?regions.find(x=>x.id===r).name:'All regions (average)';
+ $('ctitle').textContent=`${vn} · ${rn}`;$('clear').hidden=!r;
+ kill('trend');$('noChart').hidden=labels.length>0;setBox('trend',labels.length);if(!labels.length)return;
+ const c=colors();
+ charts.trend=new Chart($('chart'),{type:'line',data:{labels:labels.map(fmt),datasets:[{data,borderColor:c.accent,backgroundColor:hexA(c.accent,.1),fill:true,borderWidth:2.5,tension:.35,pointRadius:labels.length>40?0:3,pointHoverRadius:5,pointBackgroundColor:c.accent}]},
+  options:{maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+   plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>' '+peso(x.parsed.y)+' per kg'}}},
+   scales:{x:{grid:{display:false},ticks:{color:c.mute,maxTicksLimit:7,maxRotation:0}},y:{grid:{color:c.line},border:{display:false},ticks:{color:c.mute,callback:v=>'₱'+v}}}}})}
+
+function renderCompare(have){
+ kill('cmp');$('noCmp').hidden=have.length>0;setBox('cmp',have.length,have.length*38+70);if(!have.length)return;
+ const c=colors();
+ charts.cmp=new Chart($('cmp'),{type:'bar',data:{labels:have.map(x=>x.rg.name),datasets:[
+  {label:'Last update',data:have.map(x=>x.b?+x.b.price_per_kg:null),backgroundColor:c.prev,borderRadius:4},
+  {label:'Latest update',data:have.map(x=>+x.a.price_per_kg),backgroundColor:c.bar,borderRadius:4}]},
+  options:{indexAxis:'y',maintainAspectRatio:false,onClick:(e,els)=>{if(els.length)pickRegion(have[els[0].index].rg.id)},
+   plugins:{legend:{position:'bottom',labels:{color:c.mute,usePointStyle:true,boxWidth:8}},tooltip:{callbacks:{label:x=>` ${x.dataset.label}: ${peso(x.parsed.x)}`,afterLabel:x=>{const r=have[x.dataIndex];const p=x.datasetIndex?r.a:r.b;return p?fmt(p.date):''}}}},
+   scales:{x:{grid:{color:c.line},border:{display:false},ticks:{color:c.mute,callback:v=>'₱'+v}},y:{grid:{display:false},ticks:{color:c.mute,callback:trunc}}}}})}
+
+function renderChange(have){
+ const list=have.filter(x=>x.d!==null).sort((a,b)=>b.d-a.d);
+ kill('chg');$('noChg').hidden=list.length>0;setBox('chg',list.length,list.length*34+50);if(!list.length)return;
+ const c=colors();
+ charts.chg=new Chart($('chg'),{type:'bar',data:{labels:list.map(x=>x.rg.name),datasets:[{data:list.map(x=>+x.d.toFixed(2)),backgroundColor:list.map(x=>x.d>0?c.up:c.down),borderRadius:4}]},
+  options:{indexAxis:'y',maintainAspectRatio:false,onClick:(e,els)=>{if(els.length)pickRegion(list[els[0].index].rg.id)},
+   plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>' '+delta(x.parsed.x)+' per kg'}}},
+   scales:{x:{grid:{color:c.line},border:{display:false},ticks:{color:c.mute,callback:v=>(v>0?'+':'')+v}},y:{grid:{display:false},ticks:{color:c.mute,callback:trunc}}}}})}
+
+function renderList(rows){
+ rows=rows||rowsFor(prices.filter(p=>p.variety_id===state.v));
+ let list=rows.filter(x=>x.rg.name.toLowerCase().includes(state.q));
+ if(state.sort!=='name'){const dir=state.sort==='low'?1:-1;list=[...list].sort((a,b)=>!a.a?1:!b.a?-1:dir*(a.a.price_per_kg-b.a.price_per_kg))}
+ const max=Math.max(...rows.filter(x=>x.a).map(x=>+x.a.price_per_kg),1);
+ const head='<li class="item hd"><span>Region</span><span class="bar" style="background:none"></span><span style="text-align:right">Per kg</span><span style="text-align:right">Change</span><span class="as" style="text-align:right">As of</span></li>';
+ $('list').innerHTML=head+(list.length?list.map(x=>{
+  if(!x.a)return`<li class="item nodata" data-r="${x.rg.id}"><span class="nm">${esc(x.rg.name)}</span><span class="pr">No data yet</span></li>`;
+  const w=Math.max(4,+x.a.price_per_kg/max*100);
+  return`<li class="item ${x.rg.id===state.r?'sel':''}" data-r="${x.rg.id}" tabindex="0"><span class="nm">${esc(x.rg.name)}</span><span class="bar"><i style="width:${w}%"></i></span><span class="pr">${peso(x.a.price_per_kg)}</span><span class="ch ${x.d>0?'up':x.d<0?'down':''}">${delta(x.d)}</span><span class="as">${fmt(x.a.date)}</span></li>`}).join(''):'<li class="empty">No regions match your search.</li>');
+ $('list').querySelectorAll('.item[data-r]').forEach(li=>{const go=()=>pickRegion(+li.dataset.r);li.onclick=go;li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
 
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(prices.length)render()});
 init();
