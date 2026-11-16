@@ -159,18 +159,26 @@ let tab='prices',refs={regions:[],varieties:[]},rows=[],fv='',fr='';
 function toast(m,err){const d=document.createElement('div');d.className='t'+(err?' err':'');d.textContent=m;$('toast').appendChild(d);setTimeout(()=>d.remove(),err?5000:2600)}
 function friendly(e){const m=e.message||String(e);
  if(/duplicate key|unique/i.test(m))return tab==='prices'?'That region, variety and date already has a price. Edit the existing entry instead.':'That name already exists.';
- if(/row-level security|permission/i.test(m))return 'Not allowed. Make sure you are signed in as an admin.';
+ if(/row-level security|permission/i.test(m)){guard();return 'Not allowed. Your sign-in may have expired. Please sign in again.'}
  if(/violates check/i.test(m))return 'The price must be greater than 0.';
  return m}
 
 // ---------- gate ----------
-async function start(){
+// sign-in expires after 24 hours; the database enforces the same limit (see session-limit.sql)
+const MAX_MS=24*60*60*1000;
+const expired=s=>!s||!s.user||!(Date.now()-new Date(s.user.last_sign_in_at).getTime()<=MAX_MS);
+async function guard(){
  const{data:{session}}=await sb.auth.getSession();
- if(!session){location.replace('login.html');return}
+ if(!session){location.replace('login.html');return false}
+ if(expired(session)){await sb.auth.signOut();location.replace('login.html?expired=1');return false}
+ return true}
+async function start(){
+ if(!await guard())return;
+ const{data:{session}}=await sb.auth.getSession();
  const{data:ok}=await sb.rpc('is_admin');
- if(!ok){await sb.auth.signOut();location.replace('login.html?denied=1');return}
+ if(!ok){await sb.auth.signOut();location.replace('login.html?'+(expired(session)?'expired=1':'denied=1'));return}
  const email=session.user.email||'Admin';$('av').textContent=email[0].toUpperCase();$('em').innerHTML=esc(email)+'<small>Signed in</small>';
- $('gate').hidden=true;$('shell').hidden=false;load()}
+ $('gate').hidden=true;$('shell').hidden=false;load();setInterval(guard,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)guard()})}
 $('out').onclick=async()=>{await sb.auth.signOut();location.replace('login.html')};
 $('menu').onclick=()=>{if(matchMedia('(max-width:900px)').matches)document.body.classList.toggle('nav-open');else document.body.classList.toggle('collapsed')};
 $('scrim').onclick=()=>document.body.classList.remove('nav-open');
